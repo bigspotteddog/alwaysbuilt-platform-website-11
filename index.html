@@ -871,7 +871,11 @@
 (function() {
   const API_BASE = 'https://api.alwaysbuilt.com';
   const APP_BASE = 'https://app.alwaysbuilt.com';
+  // Price IDs: Founding Member $49, Studio $149, Pro $27, Agency $399
   const FOUNDING_MEMBER_PRICE_ID = 'price_1TepNA27hCRUCRVreSYmwND1';
+  const STUDIO_PRICE_ID = 'price_1TepTH27hCRUCRVraWOTyIFq';
+  const PRO_PRICE_ID = 'price_1TepTM27hCRUCRVrmeZhXPES';
+  const AGENCY_PRICE_ID = 'price_1TepT327hCRUCRVrotTWDr9Q';
   let stripeConfig = null;
 
   // Fetch config on load (no auth required)
