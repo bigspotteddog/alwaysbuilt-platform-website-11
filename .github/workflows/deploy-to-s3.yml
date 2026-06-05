@@ -1,0 +1,49 @@
+# SimpleBiz Builder - Deploy to S3
+# Uses the SimpleBiz API (same as builder publish)
+
+name: Deploy to S3
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Deploy to S3 via API
+        env:
+          API_URL: ${{ secrets.SIMPLEBIZ_API_URL }}
+          PROJECT_ID: ${{ secrets.SIMPLEBIZ_PROJECT_ID }}
+          SERVICE_TOKEN: ${{ secrets.SIMPLEBIZ_SERVICE_TOKEN }}
+        run: |
+          echo "🚀 Deploying to S3 via API..."
+          
+          for file in $(find . -type f -not -path "./.git/*" -not -path "./.github/*" -not -name "README.md"); do
+            filepath=${file#./}
+            echo "  Uploading: $filepath"
+            
+            RESPONSE=$(curl -s -X POST \
+              -H "Authorization: Bearer $SERVICE_TOKEN" \
+              -H "Content-Type: application/json" \
+              "$API_URL/v1/files/$PROJECT_ID/$filepath")
+            
+            UPLOAD_URL=$(echo "$RESPONSE" | jq -r '.url')
+            
+            if [ "$UPLOAD_URL" != "null" ] && [ -n "$UPLOAD_URL" ]; then
+              CONTENT_TYPE=$(file --mime-type -b "$file" 2>/dev/null || echo "application/octet-stream")
+              curl -s -X PUT \
+                -T "$file" \
+                -H "Content-Type: $CONTENT_TYPE" \
+                "$UPLOAD_URL"
+            else
+              echo "  ⚠️ Skipping $filepath: no upload URL returned"
+            fi
+          done
+          
+          echo "✅ Successfully deployed to S3!"
