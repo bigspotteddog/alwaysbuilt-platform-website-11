@@ -867,16 +867,110 @@
   });
 })();
 
-// Stripe Checkout (placeholder)
+// Stripe Checkout
 (function() {
-  const checkoutBtn = document.getElementById('checkout-btn');
+  const API_BASE = 'https://api.alwaysbuilt.com';
+  const APP_BASE = 'https://app.alwaysbuilt.com';
+  const FOUNDING_MEMBER_PRICE_ID = 'price_1TepNA27hCRUCRVreSYmwND1';
+  let stripeConfig = null;
+
+  // Fetch config on load (no auth required)
+  fetch(API_BASE + '/v1/stripe/config')
+    .then(function(r) { return r.json(); })
+    .then(function(data) { stripeConfig = data; })
+    .catch(function(err) { console.warn('Could not load Stripe config:', err); });
+
+  function startCheckout(priceId) {
+    // Check if user is authenticated by trying to create a checkout session
+    // If not authenticated, redirect to login then checkout
+    var checkoutUrl = APP_BASE + '/?checkout=' + encodeURIComponent(priceId);
+    // If we're already on app.alwaysbuilt.com, use the local auth
+    if (window.location.hostname === 'app.alwaysbuilt.com' || window.location.hostname === 'localhost') {
+      createLocalCheckout(priceId);
+      return;
+    }
+    // Redirect to app.alwaysbuilt.com which will handle auth + checkout
+    window.location.href = checkoutUrl;
+  }
+
+  // For use when already on app.alwaysbuilt.com (auth available)
+  function createLocalCheckout(priceId) {
+    var token = localStorage.getItem('alwaysbuilt_session');
+    if (!token) {
+      window.location.href = APP_BASE + '/?checkout=' + encodeURIComponent(priceId);
+      return;
+    }
+    try { token = JSON.parse(token).token; } catch(e) {}
+    if (!token) {
+      window.location.href = APP_BASE + '/?checkout=' + encodeURIComponent(priceId);
+      return;
+    }
+    fetch(API_BASE + '/v1/checkout/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({
+        priceId: priceId,
+        successUrl: window.location.origin + window.location.pathname + '?checkout=success',
+        cancelUrl: window.location.origin + window.location.pathname + '?checkout=cancelled'
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.url) {
+        window.location.href = data.url;
+      } else if (data.existingSubscription && data.url) {
+        // Already subscribed — redirect to billing portal
+        window.location.href = data.url;
+      } else {
+        alert(data.message || 'Could not start checkout. Please try again.');
+      }
+    })
+    .catch(function(err) {
+      alert('Checkout error: ' + err.message);
+    });
+  }
+
+  // Make available globally for the builder
+  window.__startStripeCheckout = startCheckout;
+  window.__createLocalCheckout = createLocalCheckout;
+  window.__stripeConfig = stripeConfig;
+
+  // Bind checkout buttons
+  var checkoutBtn = document.getElementById('checkout-btn');
   if (checkoutBtn) {
     checkoutBtn.addEventListener('click', function(e) {
       e.preventDefault();
-      // POST /v1/checkout/session with Founding Member price ID
-      // Redirect to Stripe Checkout
-      alert('Stripe checkout integration — POST /v1/checkout/session');
+      startCheckout(FOUNDING_MEMBER_PRICE_ID);
     });
+  }
+
+  // Also bind any other checkout links (e.g., hero CTA)
+  var checkoutLinks = document.querySelectorAll('[data-checkout]');
+  checkoutLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var priceId = link.getAttribute('data-checkout') || FOUNDING_MEMBER_PRICE_ID;
+      startCheckout(priceId);
+    });
+  });
+
+  // Handle checkout success/cancel redirect
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('checkout') === 'success') {
+    // Show a success message briefly
+    var msg = document.createElement('div');
+    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:16px 32px;border-radius:8px;font-size:16px;font-weight:600;z-index:10000;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+    msg.textContent = '🎉 Welcome aboard! Your founding member subscription is active.';
+    document.body.appendChild(msg);
+    setTimeout(function() { msg.remove(); }, 8000);
+    // Clean URL
+    params.delete('checkout');
+    var cleanUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    window.history.replaceState({}, '', cleanUrl);
+  } else if (params.get('checkout') === 'cancelled') {
+    params.delete('checkout');
+    var cleanUrl2 = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    window.history.replaceState({}, '', cleanUrl2);
   }
 })();
 
