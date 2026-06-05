@@ -864,15 +864,13 @@
   var AGENCY_PRICE_ID = 'price_1TepT327hCRUCRVrotTWDr9Q';
 
   function startCheckout(priceId) {
-    fetch(API_BASE + '/v1/stripe/public-checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        priceId: priceId,
-        successUrl: window.location.origin + window.location.pathname + '?checkout=success',
-        cancelUrl: window.location.origin + window.location.pathname + '?checkout=cancelled'
-      })
-    })
+    // Public checkout via GET (avoids API Gateway POST auth requirement)
+    var params = new URLSearchParams({
+      priceId: priceId,
+      successUrl: window.location.origin + window.location.pathname + '?checkout=success',
+      cancelUrl: window.location.origin + window.location.pathname + '?checkout=cancelled'
+    });
+    fetch(API_BASE + '/v1/stripe/public-checkout?' + params.toString())
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (data.url) {
