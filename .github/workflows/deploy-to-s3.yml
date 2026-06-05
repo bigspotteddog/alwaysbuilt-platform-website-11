@@ -18,9 +18,9 @@ jobs:
 
       - name: Deploy via AlwaysBuilt API
         env:
-          API_URL: ${{ secrets.API_URL }}
-          PROJECT_ID: ${{ secrets.PROJECT_ID }}
-          SERVICE_TOKEN: ${{ secrets.SERVICE_TOKEN }}
+          API_URL: ${{ secrets.SIMPLEBIZ_API_URL }}
+          PROJECT_ID: ${{ secrets.SIMPLEBIZ_PROJECT_ID }}
+          SERVICE_TOKEN: ${{ secrets.SIMPLEBIZ_SERVICE_TOKEN }}
         run: |
           echo "🚀 Deploying to S3 via API..."
 
