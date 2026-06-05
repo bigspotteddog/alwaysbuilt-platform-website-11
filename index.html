@@ -855,6 +855,930 @@
 })();
 
 // Smooth Scroll
+// Stripe Checkout
+(function() {
+  var API_BASE = 'https://api.alwaysbuilt.com';
+  var FOUNDING_MEMBER_PRICE_ID = 'price_1TepNA27hCRUCRVreSYmwND1';
+  var STUDIO_PRICE_ID = 'price_1TepTH27hCRUCRVraWOTyIFq';
+  var PRO_PRICE_ID = 'price_1TepTM27hCRUCRVrmeZhXPES';
+  var AGENCY_PRICE_ID = 'price_1TepT327hCRUCRVrotTWDr9Q';
+
+  function startCheckout(priceId) {
+    fetch(API_BASE + '/v1/stripe/public-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        priceId: priceId,
+        successUrl: window.location.origin + window.location.pathname + '?checkout=success',
+        cancelUrl: window.location.origin + window.location.pathname + '?checkout=cancelled'
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.message || 'Could not start checkout. Please try again.');
+      }
+    })
+    .catch(function(err) {
+      alert('Checkout error: ' + err.message);
+    });
+  }
+
+  window.__startStripeCheckout = startCheckout;
+
+  var checkoutBtn = document.getElementById('checkout-btn');
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      startCheckout(FOUNDING_MEMBER_PRICE_ID);
+    });
+  }
+
+  var checkoutLinks = document.querySelectorAll('[data-checkout]');
+  checkoutLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var priceId = link.getAttribute('data-checkout') || FOUNDING_MEMBER_PRICE_ID;
+      startCheckout(priceId);
+    });
+  });
+
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('checkout') === 'success') {
+    var msg = document.createElement('div');
+    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:16px 32px;border-radius:8px;font-size:16px;font-weight:600;z-index:10000;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+    msg.textContent = 'Welcome aboard! Your subscription is active.';
+    document.body.appendChild(msg);
+    setTimeout(function() { msg.remove(); }, 8000);
+    params.delete('checkout');
+    params.delete('session_id');
+    var cleanUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    window.history.replaceState({}, '', cleanUrl);
+  } else if (params.get('checkout') === 'cancelled') {
+    params.delete('checkout');
+    var cleanUrl2 = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    window.history.replaceState({}, '', cleanUrl2);
+  }
+})();
+CTYPE html>
+<html lang="en" data-theme="dark"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlwaysBuilt</title>
+  <meta name="description" content="No build step. No deploy pipeline. No infrastructure to manage. AlwaysBuilt is always running, always deployed, and always ready.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=1779523555904">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style id="depth-ladder-styles">.depth-ladder { max-width: var(--max-width); margin: 48px auto 0px; display: flex; flex-direction: column; gap: 0px; }
+.depth-rung { display: grid; grid-template-columns: 160px 1fr; gap: 40px; padding: 36px 0px; border-bottom: 1px solid var(--border); position: relative; transition: background 0.3s; }
+.depth-rung:first-child { border-top: 1px solid var(--border); }
+.depth-rung:hover { background: var(--accent-soft); }
+.depth-rung-indicator { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding-top: 4px; }
+.depth-level { font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; }
+.depth-bar { width: 100%; height: 2px; background: var(--white-06); border-radius: 1px; overflow: hidden; }
+.depth-bar-fill { height: 100%; background: var(--accent); transition: width 0.6s; border-radius: 1px; }
+.depth-rung[data-depth="1"] .depth-bar-fill { opacity: 0.4; }
+.depth-rung[data-depth="2"] .depth-bar-fill { opacity: 0.55; }
+.depth-rung[data-depth="3"] .depth-bar-fill { opacity: 0.7; }
+.depth-rung[data-depth="4"] .depth-bar-fill { opacity: 0.85; }
+.depth-rung[data-depth="5"] .depth-bar-fill { opacity: 1; }
+.depth-rung-content { display: flex; flex-direction: column; gap: 10px; }
+.depth-rung-header { display: flex; align-items: center; gap: 14px; }
+.depth-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); background: var(--bg-card); color: var(--accent); flex-shrink: 0; transition: border-color 0.3s, background 0.3s; }
+.depth-rung:hover .depth-icon { border-color: var(--border-accent); background: var(--accent-soft); }
+.depth-title { font-family: var(--font-body); font-size: 17px; font-weight: 500; color: var(--white); letter-spacing: 0.3px; margin: 0px; }
+.depth-desc { font-family: var(--font-body); font-size: 14px; font-weight: 300; line-height: 1.7; color: var(--white-50); margin: 0px; padding-left: 54px; transition: color 0.3s; }
+.depth-rung:hover .depth-desc { color: var(--white-70); }
+@media (max-width: 768px) {
+  .depth-rung { grid-template-columns: 1fr; gap: 16px; padding: 28px 0px; }
+  .depth-rung-indicator { flex-direction: row; align-items: center; gap: 16px; }
+  .depth-bar { flex: 1 1 0%; }
+  .depth-desc { padding-left: 54px; }
+}
+@media (max-width: 480px) {
+  .depth-desc { padding-left: 0px; }
+}
+</style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.9.1/axe.min.js"></script>
+  <style id="chrome-bar-theme">.chrome-bar { color: var(--white-70); border-bottom: 1px solid var(--border); background: var(--bg-lift) !important; }
+.chrome-bar .mono, .chrome-bar .small { color: var(--white-70); }
+.chrome-bar #chromeExpand { color: var(--white-50); }
+.chrome-bar #chromeExpand:hover { color: var(--white-90); }
+.chrome-bar .cd-r, .chrome-bar .cd-y, .chrome-bar .cd-g { display: inline-block; height: 10px; border-radius: 50%; width: 10px !important; margin-right: 8px !important; }
+.chrome-bar .cd-r { background: rgb(255, 95, 87); }
+.chrome-bar .cd-y { background: rgb(255, 189, 46); }
+.chrome-bar .cd-g { background: rgb(40, 200, 64); }
+.chrome-bar .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: rgb(40, 200, 64); box-shadow: rgba(40, 200, 64, 0.5) 0px 0px 4px; animation: 2s ease-in-out 0s infinite normal none running livePulse; margin-right: 4px !important; }
+@keyframes livePulse { 
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+#builderPeek.expanded { position: fixed !important; top: 0px !important; left: 0px !important; width: 100vw !important; height: 100vh !important; z-index: 9999 !important; margin: 0px !important; flex: 0 0 auto !important; }
+#builderPeek.expanded .builder-chrome { border-radius: 0px !important; height: 100% !important; }
+#builderPeek.expanded #iframeWrap { min-height: calc(-48px + 100vh) !important; }
+#builderPeek.expanded #builderIframe { zoom: 1 !important; }
+#expandIcon.expanded { transform: rotate(180deg); transition: transform 0.3s; }
+</style>
+  <style id="custom-css-rules"></style>
+  
+<meta name="simplebiz-project-id" content="0a18dff6-a1fd-4d81-829d-23e3ab50f1ee"></head>
+
+<body data-debug-result="{&quot;btnExists&quot;:true,&quot;onclick&quot;:null,&quot;toggleExpandFn&quot;:&quot;function&quot;}">
+
+  <!-- Noise Overlay -->
+  <div class="noise" aria-hidden="true"></div>
+
+  <!-- Theme Toggle -->
+
+
+  <!-- Navigation -->
+  <nav class="nav" style="position: fixed;">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <svg class="nav-logo-icon" width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="2" y="2" width="24" height="24" stroke="currentColor" stroke-width="1.5"></rect>
+          <rect x="6" y="6" width="16" height="16" stroke="currentColor" stroke-width="1.5"></rect>
+          <rect x="10" y="10" width="8" height="8" fill="currentColor"></rect>
+        </svg>
+        AlwaysBuilt
+      </a>
+      <div class="nav-menu" style="justify-content: center;">
+        <a href="#how-it-works" class="nav-link" style="margin-left: auto;">How It Works</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#developers" class="nav-link">Developers</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" style="margin-left: auto;">
+  <svg class="theme-toggle-icon theme-toggle-icon--sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+  <svg class="theme-toggle-icon theme-toggle-icon--moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button><a href="#pricing" class="nav-cta btn btn-primary" style="">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" style="padding: 40px;">
+    <div class="hero-bg">
+      <div class="hero-bg-image" style="position: absolute; inset: 0px; width: 100%; height: 100%; background-image: url(&quot;imgs/golden-abstract.jpg&quot;); background-size: cover; background-position: center center; background-repeat: no-repeat; opacity: 0.45; filter: brightness(0.5) contrast(1.1) saturate(0.8); animation: 32s ease-in-out 0s infinite alternate none running hero-drift;">
+      </div>
+      <div class="hero-grain" style="position: absolute; inset: 0px; z-index: 1; pointer-events: none; opacity: 0.03; background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E&quot;); background-repeat: repeat; background-size: 180px 180px;">
+      </div>
+      <div class="hero-aurora"></div>
+      <div class="hero-geometry"></div>
+    </div>
+    <div class="hero-content container" style="z-index: 10; position: relative; margin: 0px; max-width: unset; grid-template-columns: 0.8fr 1.2fr; gap: 0px; outline: none; min-height: 800px;" contenteditable="false">
+      <div class="hero-left" style="position: relative; z-index: 10;">
+  <div class="hero-kicker reveal visible" style="opacity: 1; visibility: visible; transform: none; ">
+    <span class="kicker-dot"></span>
+    Founding Member Launch
+  </div>
+  <h1 class="hero-title reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none; outline: none;">The
+    <span style="color: rgb(200, 178, 115) !important; fill: rgb(200, 178, 115) !important;">Design</span>
+    <span style="font-style: normal;">IS</span> the
+    <span style="color: var(--white);">Running Application</span>
+  </h1>
+  
+  <p class="hero-subtitle reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none; font-weight: 400; outline: none;" contenteditable="false">Compose, Don't Rebuild. Clone entire projects into subfolders. Add a client portal, membership, or ecommerce to any site in one click. No build step. No deploy pipeline. Always live. Always yours.</p>
+  <div class="hero-actions reveal reveal-delay-3 visible" style="opacity: 1; visibility: visible; transform: none;">
+    <a href="#pricing" class="btn btn-primary btn-full" data-checkout="price_1TepNA27hCRUCRVreSYmwND1" style="display: inline-flex; align-items: center; gap: 10px; font-family: &quot;DM Sans&quot;, system-ui, sans-serif; font-weight: 600; font-size: 0.82rem; padding: 16px 32px; cursor: pointer; text-decoration: none; transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1); letter-spacing: 0.06em; text-transform: uppercase; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; background: rgb(200, 178, 115); color: rgb(8, 8, 8); width: 100%; max-width: 520px; justify-content: center;">
+      Claim Your Founding Member Spot — $49/mo Forever
+    </a><a href="https://youtu.be/v3sODNhnSFw" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 10px; font-family: &quot;DM Sans&quot;, system-ui, sans-serif; font-weight: 600; font-size: 0.82rem; padding: 16px 32px; cursor: pointer; text-decoration: none; transition: 0.35s cubic-bezier(0.16, 1, 0.3, 1); letter-spacing: 0.06em; text-transform: uppercase; border: 1.5px solid rgba(200, 178, 115, 0.5); background: transparent; color: rgb(200, 178, 115); width: 100%; max-width: 520px; justify-content: center; border-radius: 0px;">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="flex-shrink:0;">
+    <path d="M8 5v14l11-7z"></path>
+  </svg>
+  Watch Demo
+</a>
+    <p class="hero-note" style="outline: none;" contenteditable="false">Limited to 50 spots. White-glove onboarding by the
+  founder. Regular pricing starts at $99/mo.
+</p>
+  </div>
+</div>
+
+      <div class="hero-right" style="display: flex; align-items: center; justify-content: center; overflow: visible; width: 100%; height: 100%;">
+
+        <div id="builderPeek" class="d-flex" style="display: flex; flex: 1 1 auto; width: 100%; height: 100%; zoom: 1; flex-direction: column !important;">
+          <div class="builder-chrome d-flex flex-column" style="flex: 1 1 auto; box-shadow: rgba(0, 0, 0, 0.26) 4px 4px 12px 2px; border-radius: 8px; overflow: hidden; position: relative;">
+            <!-- Chrome Bar -->
+            <div class="chrome-bar" style="display: flex; align-items: center; justify-content: space-between; padding-right: 1rem; padding-left: 1rem; flex: 0 0 auto; height: 48px; outline: none;" contenteditable="false">
+              <div class="d-flex align-items-center gap-2">
+                <span class="cd-r" style="box-sizing: border-box; width: 10px; height: 10px; border-radius: 50%; background: rgb(255, 95, 87); padding: 0px;"></span><span class="cd-y"></span><span class="cd-g"></span>
+              </div>
+              <div class="mono small" contenteditable="false" style="outline: none;">app.alwaysbuilt.com</div>
+              <div class="d-flex align-items-center gap-2" style="
+    display: flex;
+    align-items: center;
+">
+                <div class="live-dot"></div>
+                <span id="chrome-lbl" class="small">Live demo</span><button id="chromeExpand" class="btn btn-sm p-1" style="border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; background: none; padding: 15px;" title="View full demo" onclick="toggleExpand()"><svg id="expandIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class=""><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></button>
+              </div>
+            </div><!-- Iframe Fill Area -->
+            <div id="iframeWrap" class="position-relative" style="flex: 1 1 auto; overflow: hidden; background: rgb(240, 240, 240); height: calc(100% - 48px);">
+              <iframe id="builderIframe" src="https://app.alwaysbuilt.com/?demo=1" frameborder="0" style="top: 0px; left: 0px; width: 100%; height: 100%; border: 0px; background: rgb(255, 255, 255); zoom: 0.6;"></iframe>
+            </div>
+
+
+          </div>
+        </div>
+
+
+
+
+
+
+
+        <div class="hero-stripe"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What Is AlwaysBuilt -->
+  <section class="section" id="what-is">
+    <div class="container">
+      <div class="section-header section-center">
+        <span class="section-label reveal visible" style="opacity: 1; visibility: visible; transform: none;">What Is AlwaysBuilt?</span>
+        <h2 class="section-title reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
+          You build it.<br>It's already running.
+        </h2>
+        <p class="section-subtitle reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none; outline: none;" contenteditable="false"></p>
+        <div style="opacity: 1; visibility: visible; transform: none;" class="section-subtitle reveal reveal-delay-2 visible">AlwaysBuilt is a full-stack application platform for
+          building, hosting, and operating web applications. Every project is live from the moment you create it. There
+          is no gap between building and deploying — they are the same thing.</div>
+        <p></p>
+      </div>
+      <div class="nutshell-stats reveal reveal-delay-3 visible" style="opacity: 1; visibility: visible; transform: none;">
+        <div class="nutshell-card">
+          <div class="nutshell-stat">
+            <span class="nutshell-stat-value">0</span>
+            <span class="nutshell-stat-label">Build steps</span>
+          </div>
+        </div>
+        <div class="nutshell-card">
+          <div class="nutshell-stat">
+            <span class="nutshell-stat-value">0</span>
+            <span class="nutshell-stat-label">Deploy pipelines</span>
+          </div>
+        </div>
+        <div class="nutshell-card">
+          <div class="nutshell-stat">
+            <span class="nutshell-stat-value">1</span>
+            <span class="nutshell-stat-label">Click to publish</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <div class="section-header section-center">
+        <span class="section-label reveal visible" style="opacity: 1; visibility: visible; transform: none;">How It Works</span>
+        <h2 class="section-title reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">Three steps. Zero friction.</h2>
+      </div>
+      <div class="steps-list">
+        <div class="step-card reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="step-number">01</div>
+          <h3>Build Visually</h3>
+          <p>Point-and-click editor, AI agent, or raw code. Your choice at every step. Start with what you know, go as
+            deep as you need.</p>
+        </div>
+        <div class="step-card reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="step-number">02</div>
+          <h3>It's Already Live</h3>
+          <p>Every change syncs directly to your dev site. There is no build step. Your edits are your deployment —
+            instantly on S3, globally distributed.</p>
+        </div>
+        <div class="step-card reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="step-number">03</div>
+          <h3>Publish Instantly</h3>
+          <p>One click copies dev to production. Or push to GitHub. Or use your own hosting. You decide where your code
+            lives.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-header section-center">
+        <span class="section-label reveal visible" style="opacity: 1; visibility: visible; transform: none;">Features</span>
+        <h2 class="section-title reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">Everything you need.<br>Nothing you don't.</h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <h3>No Build Step</h3>
+          <p>Your dev site IS your live site. Changes sync instantly to S3. No webpack, no pipelines, no waiting.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42">
+              </path>
+            </svg>
+          </div>
+          <h3>AI That Sees and Learns</h3>
+          <p>The AI agent takes screenshots to visually verify its work. It runs Lighthouse audits to fix performance,
+            accessibility, and SEO issues autonomously.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </div>
+          <h3>Progressive Tool Depth</h3>
+          <p>Start with the AI agent, move to point-and-click, tweak with property controls, edit stylesheets, or drop
+            into Monaco for raw code. Go as deep as you need.</p>
+        </div>
+        <div class="feature-card reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="1"></rect>
+              <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"></path>
+            </svg>
+          </div>
+          <h3>Compose, Don't Rebuild</h3>
+          <p>Clone entire projects into subfolders — add a client portal, membership platform, or ecommerce to any site
+            in one click. Copy-paste elements across pages.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+              <path d="M2 17l10 5 10-5"></path>
+              <path d="M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
+          <h3>Zero-Config Backend</h3>
+          <p>Forms auto-detect and handle submissions. CRUD works on any data shape without migrations. Email triggers
+            on routes ending in /emails. Stripe sits behind the API.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+              </path>
+            </svg>
+          </div>
+          <h3>Custom Domains</h3>
+          <p>Point any domain at your project. Automatic SSL via CloudFlare. Vanity subdomains on alwaysbuilt.com.</p>
+        </div>
+        <div class="feature-card reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+          </div>
+          <h3>File Version History</h3>
+          <p>Every save is a version. Preview any version, restore with one click. Full diff support.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+              </path>
+            </svg>
+          </div>
+          <h3>GitHub Integration</h3>
+          <p>Push to GitHub. Deploy through GitHub Actions to S3. Or publish to your own frontend hosting. No lock-in.
+          </p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3>White-Label Ready</h3>
+          <p>Transfer projects between organizations. Perfect for agencies handing off to clients. Just a pointer change
+            — no data migration.</p>
+        </div>
+        <div class="feature-card reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+          </div>
+          <h3>Payments Built In</h3>
+          <p>Stripe integration for one-time payments, subscriptions, and Stripe Connect for marketplaces.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h3>Self-Hosted Auth</h3>
+          <p>Magic link login, JWT session tokens, per-project API keys. No external auth provider. Your data, your
+            users.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="feature-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3>Client Portals Built In</h3>
+          <p>Clone the client portal module into any project — instant secure client area with magic-link login, private
+            document sharing, and scoped data access.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- For Developers -->
+  <section class="section" id="developers">
+    <div class="container">
+      <div class="section-header section-center">
+        <span class="section-label reveal visible" style="opacity: 1; visibility: visible; transform: none;">For Developers</span>
+        <h2 class="section-title reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">Progressive depth.<br>Same platform.</h2>
+        <p class="section-subtitle reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+          Stay in the visual tools for simple sites, or go all the way down. Zero to millions without changing tools.
+        </p>
+      </div>
+      <div class="depth-ladder reveal reveal-delay-3 visible" style="opacity: 1; visibility: visible; transform: none;">
+        <div class="depth-rung" data-depth="1">
+          <div class="depth-rung-indicator">
+            <span class="depth-level">01</span>
+            <div class="depth-bar">
+              <div class="depth-bar-fill" style="width: 20%"></div>
+            </div>
+          </div>
+          <div class="depth-rung-content">
+            <div class="depth-rung-header">
+              <div class="depth-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+              <h3 class="depth-title">AI Agent</h3>
+            </div>
+            <p class="depth-desc">Describe what you want. The agent builds it — layout, copy, styling. No code required.
+            </p>
+          </div>
+        </div>
+
+        <div class="depth-rung" data-depth="2">
+          <div class="depth-rung-indicator">
+            <span class="depth-level">02</span>
+            <div class="depth-bar">
+              <div class="depth-bar-fill" style="width: 40%"></div>
+            </div>
+          </div>
+          <div class="depth-rung-content">
+            <div class="depth-rung-header">
+              <div class="depth-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                  <polyline points="10 17 15 12 10 7"></polyline>
+                  <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+              </div>
+              <h3 class="depth-title">Point-and-Click</h3>
+            </div>
+            <p class="depth-desc">Drag, drop, resize. Visual editing with real-time preview and responsive controls.</p>
+          </div>
+        </div>
+
+        <div class="depth-rung" data-depth="3">
+          <div class="depth-rung-indicator">
+            <span class="depth-level">03</span>
+            <div class="depth-bar">
+              <div class="depth-bar-fill" style="width: 60%"></div>
+            </div>
+          </div>
+          <div class="depth-rung-content">
+            <div class="depth-rung-header">
+              <div class="depth-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                  </path>
+                </svg>
+              </div>
+              <h3 class="depth-title">Property Controls</h3>
+            </div>
+            <p class="depth-desc">Fine-tune with structured controls. Component props, design tokens, and layout
+              parameters — all visual.</p>
+          </div>
+        </div>
+
+        <div class="depth-rung" data-depth="4">
+          <div class="depth-rung-indicator">
+            <span class="depth-level">04</span>
+            <div class="depth-bar">
+              <div class="depth-bar-fill" style="width: 80%"></div>
+            </div>
+          </div>
+          <div class="depth-rung-content">
+            <div class="depth-rung-header">
+              <div class="depth-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+                </svg>
+              </div>
+              <h3 class="depth-title">Stylesheets</h3>
+            </div>
+            <p class="depth-desc">Write real CSS with full cascade support. Variables, media queries, keyframes — the
+              real thing.</p>
+          </div>
+        </div>
+
+        <div class="depth-rung" data-depth="5">
+          <div class="depth-rung-indicator">
+            <span class="depth-level">05</span>
+            <div class="depth-bar">
+              <div class="depth-bar-fill" style="width: 100%"></div>
+            </div>
+          </div>
+          <div class="depth-rung-content">
+            <div class="depth-rung-header">
+              <div class="depth-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="16 18 22 12 16 6"></polyline>
+                  <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+              </div>
+              <h3 class="depth-title">Monaco Code</h3>
+            </div>
+            <p class="depth-desc">Full Monaco editor. Edit any file, any framework. Ship production code from the same
+              tool.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- For Agencies -->
+  <section class="section" id="agencies">
+    <div class="container">
+      <div class="section-header section-center">
+        <span class="section-label reveal visible" style="opacity: 1; visibility: visible; transform: none;">For Agencies</span>
+        <h2 class="section-title reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">Build faster.<br>Hand off cleanly.</h2>
+      </div>
+      <div class="principles-grid">
+        <div class="principle-card reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="principle-num">01</div>
+          <h3>Build in your org</h3>
+          <p>Build client sites in your organization. Clone your best work into new projects. Compose sites from your
+            library of modules — client portals, membership platforms, payment processing, ecommerce. Every project you
+            build makes the next one faster.</p>
+        </div>
+        <div class="principle-card reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="principle-num">02</div>
+          <h3>Transfer ownership in one click</h3>
+          <p>When they're ready, transfer the project to the client's org. It's just a pointer change — no data
+            migration. Perfect for agency handoffs.</p>
+        </div>
+        <div class="principle-card reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <div class="principle-num">03</div>
+          <h3>Client portals, built in</h3>
+          <p>Clone the client-portal module into any project for an instant secure client area with magic-link login,
+            private document sharing, and per-client data isolation. Pair it with the admin module for full client
+            management.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section class="section" id="use-cases">
+    <div class="container">
+      <div class="section-header section-center">
+        <span class="section-label reveal visible" style="opacity: 1; visibility: visible; transform: none;">Use Cases</span>
+        <h2 class="section-title reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">What will you build?</h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+          <h3>Small Business Websites</h3>
+          <p>Professional web presence with forms, analytics, and custom domains — no technical knowledge required.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <h3>Client Portals</h3>
+          <p>Secure file sharing, magic-link login, and per-client data isolation. Built in, not bolted on.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <h3>Membership Platforms</h3>
+          <p>Gated content, Stripe subscriptions, and member management. Launch in hours, not months.</p>
+        </div>
+        <div class="feature-card reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+          <h3>Ecommerce Storefronts</h3>
+          <p>Full Stripe integration — one-time payments, subscriptions, and Stripe Connect for marketplaces.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <h3>SaaS Landing Pages</h3>
+          <p>From idea to live site in an afternoon. AI builds, you refine, it's already running.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <h3>Agency Client Sites</h3>
+          <p>White-label handoff with one-click project transfers. Your process, their site, zero friction.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="section-header section-center">
+        <span class="section-label reveal visible" style="opacity: 1; visibility: visible; transform: none;">Pricing</span>
+        <h2 class="section-title reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">Founding Member<br>$49/month — Forever</h2>
+        <p class="section-subtitle reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+          Limited to the first 50 members. Price locked in for life. All top-level features included.
+        </p>
+      </div>
+      <div class="founding-wrap reveal reveal-delay-3 visible" style="opacity: 1; visibility: visible; transform: none; max-width: 1100px;">
+        <div class="founding-card">
+          <div style="max-width: 500px; margin: auto; padding: 1rem;">
+            <div class="price-badge">Founding Member</div>
+            <div class="pricing-amount" style="margin: 2rem;">
+              <span class="pricing-dollar">$</span>
+              <span class="price-amount">49</span>
+              <span class="pricing-period">/month</span>
+            </div>
+            <p class="pricing-sub">Forever. Never increases.</p>
+            <div class="story-divider"></div>
+            <ul class="perks-list">
+              <li class="perk-check">Unlimited projects</li>
+              <li class="perk-check">Unlimited pages per project</li>
+              <li class="perk-check">Custom domains with auto-SSL</li>
+              <li class="perk-check">Full AI agent access (all models)</li>
+              <li class="perk-check">Stripe payments integration</li>
+              <li class="perk-check">GitHub publishing</li>
+              <li class="perk-check">White-glove onboarding by the founder</li>
+              <li class="perk-check">All top-level subscription features</li>
+              <li class="perk-check">Price locked in for life</li>
+            </ul>
+            <div class="story-divider"></div>
+            <p class="urgency-line" contenteditable="false" style="outline: none;">Only 50 spots available. After the Founding Member tier is full, regular pricing
+              will apply. Regular pricing starts at $99/mo.</p>
+            <a href="#" class="btn btn-primary btn-full" id="checkout-btn">Claim Your Founding Member Spot — $49/mo
+              Forever</a>
+          </div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Strip -->
+  <section class="cta-strip">
+    <div class="cta-strip-inner container">
+      <div>
+        <h2 class="cta-strip-title reveal visible" style="opacity: 1; visibility: visible; transform: none;">Ready to
+          build something that's already running?</h2>
+        <p class="cta-strip-sub reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">Join the first 50. Lock in $49/month forever.</p>
+      </div>
+      <div class="cta-strip-buttons reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+        <a href="#pricing" class="btn btn-primary" data-checkout="price_1TepNA27hCRUCRVreSYmwND1">Claim Your Spot</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-header section-center">
+        <span class="section-label reveal visible" style="opacity: 1; visibility: visible; transform: none;">FAQ</span>
+        <h2 class="section-title reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">Questions answered</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+          <button class="faq-q" aria-expanded="false">
+          What does "always built" mean?
+          <span class="faq-q-toggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </span>
+        </button>
+          <div class="faq-a" style="">
+            <div class="faq-a-inner">
+              Your project is always live from the moment you create it. There is no build step. Editing and deploying
+              are the same action. Your dev site is your production pipeline.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <button class="faq-q" aria-expanded="false">
+          Do I need to know how to code?
+          <span class="faq-q-toggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </span>
+        </button>
+          <div class="faq-a" style="">
+            <div class="faq-a-inner">
+              No. Start with the AI agent or point-and-click editor. If you want to go deeper, the property controls,
+              stylesheet editor, and Monaco code editor are available — but you never have to touch them.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <button class="faq-q" aria-expanded="false">
+          Can I use my own domain?
+          <span class="faq-q-toggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </span>
+        </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              Yes. Custom domains with automatic SSL via CloudFlare. Vanity subdomains on alwaysbuilt.com are also
+              available.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+          <button class="faq-q" aria-expanded="false">
+          What happens when I publish?
+          <span class="faq-q-toggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </span>
+        </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              Publishing is an instant S3 copy from dev to production. Zero data passes through any build pipeline. A
+              CloudFront cache invalidation means your changes go live immediately.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <button class="faq-q" aria-expanded="false">
+          What if I want to host somewhere else?
+          <span class="faq-q-toggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </span>
+        </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              Push to GitHub. Use the included GitHub Actions workflow to deploy anywhere. Or write your own CI/CD. No
+              lock-in.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <button class="faq-q" aria-expanded="false">
+          Is there a free trial?
+          <span class="faq-q-toggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </span>
+        </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              Founding Members get white-glove onboarding directly with the founder. Join the first 50 to lock in
+              $49/month forever.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+          <button class="faq-q" aria-expanded="false">
+          Can I transfer a project to a client?
+          <span class="faq-q-toggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </span>
+        </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              Yes. Organization transfers are a pointer change in the database. No data migration. Perfect for agency
+              handoffs.
+            </div>
+          </div>
+        </div>
+        <div class="faq-item reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
+          <button class="faq-q" aria-expanded="false">
+          What AI models are available?
+          <span class="faq-q-toggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </span>
+        </button>
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              Claude (Anthropic), Llama, Qwen, DeepSeek, Mistral (Together AI), Groq, GLM, Kimi, and Ollama for
+              self-hosted models.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner container">
+      <div class="footer-brand">
+  <a class="footer-logo" href="#">
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
+      <rect x="2" y="2" width="24" height="24" stroke="currentColor" stroke-width="1.5"></rect>
+      <rect x="6" y="6" width="16" height="16" stroke="currentColor" stroke-width="1.5"></rect>
+      <rect x="10" y="10" width="8" height="8" fill="currentColor"></rect>
+    </svg>
+  </a>
+  <p class="footer-tagline"><span style="color: var(--white); outline: none;" contenteditable="false" class="">AlwaysBuilt</span> Design IS the Running Application</p>
+</div>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://app.alwaysbuilt.com" target="_blank" rel="noopener">Builder</a>
+      </div>
+      <div class="footer-bottom">
+        <span contenteditable="false" class="" style="outline: none;">© 2026 AlwaysBuilt. All rights reserved.</span>
+        <span class="footer-built">Built on AlwaysBuilt</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Theme Toggle
+(function() {
+  const toggle = document.getElementById('theme-toggle');
+  const html = document.documentElement;
+  const stored = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = stored || html.getAttribute('data-theme') || (prefersDark ? 'dark' : 'light');
+  html.setAttribute('data-theme', theme);
+
+  toggle.addEventListener('click', function() {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+})();
+
+// Scroll Reveal
+(function() {
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  reveals.forEach(function(el) {
+    observer.observe(el);
+  });
+})();
+
+// FAQ Accordion
+(function() {
+  const items = document.querySelectorAll('.faq-item');
+  items.forEach(function(item) {
+    const btn = item.querySelector('.faq-q');
+    const answer = item.querySelector('.faq-a');
+    btn.addEventListener('click', function() {
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      // Close all
+      items.forEach(function(other) {
+        other.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+        other.querySelector('.faq-a').style.maxHeight = null;
+      });
+      // Open clicked if it was closed
+      if (!isOpen) {
+        btn.setAttribute('aria-expanded', 'true');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    });
+  });
+})();
+
+// Smooth Scroll
 (function() {
   document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
     anchor.addEventListener('click', function(e) {
@@ -866,118 +1790,6 @@
     });
   });
 })();
-
-// Stripe Checkout
-(function() {
-  const API_BASE = 'https://api.alwaysbuilt.com';
-  const APP_BASE = 'https://app.alwaysbuilt.com';
-  // Price IDs: Founding Member $49, Studio $149, Pro $27, Agency $399
-  const FOUNDING_MEMBER_PRICE_ID = 'price_1TepNA27hCRUCRVreSYmwND1';
-  const STUDIO_PRICE_ID = 'price_1TepTH27hCRUCRVraWOTyIFq';
-  const PRO_PRICE_ID = 'price_1TepTM27hCRUCRVrmeZhXPES';
-  const AGENCY_PRICE_ID = 'price_1TepT327hCRUCRVrotTWDr9Q';
-  let stripeConfig = null;
-
-  // Fetch config on load (no auth required)
-  fetch(API_BASE + '/v1/stripe/config')
-    .then(function(r) { return r.json(); })
-    .then(function(data) { stripeConfig = data; })
-    .catch(function(err) { console.warn('Could not load Stripe config:', err); });
-
-  function startCheckout(priceId) {
-    // Check if user is authenticated by trying to create a checkout session
-    // If not authenticated, redirect to login then checkout
-    var checkoutUrl = APP_BASE + '/?checkout=' + encodeURIComponent(priceId);
-    // If we're already on app.alwaysbuilt.com, use the local auth
-    if (window.location.hostname === 'app.alwaysbuilt.com' || window.location.hostname === 'localhost') {
-      createLocalCheckout(priceId);
-      return;
-    }
-    // Redirect to app.alwaysbuilt.com which will handle auth + checkout
-    window.location.href = checkoutUrl;
-  }
-
-  // For use when already on app.alwaysbuilt.com (auth available)
-  function createLocalCheckout(priceId) {
-    var token = localStorage.getItem('alwaysbuilt_session');
-    if (!token) {
-      window.location.href = APP_BASE + '/?checkout=' + encodeURIComponent(priceId);
-      return;
-    }
-    try { token = JSON.parse(token).token; } catch(e) {}
-    if (!token) {
-      window.location.href = APP_BASE + '/?checkout=' + encodeURIComponent(priceId);
-      return;
-    }
-    fetch(API_BASE + '/v1/checkout/session', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify({
-        priceId: priceId,
-        successUrl: window.location.origin + window.location.pathname + '?checkout=success',
-        cancelUrl: window.location.origin + window.location.pathname + '?checkout=cancelled'
-      })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data.url) {
-        window.location.href = data.url;
-      } else if (data.existingSubscription && data.url) {
-        // Already subscribed — redirect to billing portal
-        window.location.href = data.url;
-      } else {
-        alert(data.message || 'Could not start checkout. Please try again.');
-      }
-    })
-    .catch(function(err) {
-      alert('Checkout error: ' + err.message);
-    });
-  }
-
-  // Make available globally for the builder
-  window.__startStripeCheckout = startCheckout;
-  window.__createLocalCheckout = createLocalCheckout;
-  window.__stripeConfig = stripeConfig;
-
-  // Bind checkout buttons
-  var checkoutBtn = document.getElementById('checkout-btn');
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      startCheckout(FOUNDING_MEMBER_PRICE_ID);
-    });
-  }
-
-  // Also bind any other checkout links (e.g., hero CTA)
-  var checkoutLinks = document.querySelectorAll('[data-checkout]');
-  checkoutLinks.forEach(function(link) {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      var priceId = link.getAttribute('data-checkout') || FOUNDING_MEMBER_PRICE_ID;
-      startCheckout(priceId);
-    });
-  });
-
-  // Handle checkout success/cancel redirect
-  var params = new URLSearchParams(window.location.search);
-  if (params.get('checkout') === 'success') {
-    // Show a success message briefly
-    var msg = document.createElement('div');
-    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:16px 32px;border-radius:8px;font-size:16px;font-weight:600;z-index:10000;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
-    msg.textContent = '🎉 Welcome aboard! Your founding member subscription is active.';
-    document.body.appendChild(msg);
-    setTimeout(function() { msg.remove(); }, 8000);
-    // Clean URL
-    params.delete('checkout');
-    var cleanUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
-    window.history.replaceState({}, '', cleanUrl);
-  } else if (params.get('checkout') === 'cancelled') {
-    params.delete('checkout');
-    var cleanUrl2 = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
-    window.history.replaceState({}, '', cleanUrl2);
-  }
-})();
-
 
 // Toggle expand functionality for builder peek
 let isExpanded = false;
