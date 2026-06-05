@@ -1,3 +1,6 @@
+# AlwaysBuilt Platform Website - Deploy to S3
+# Uses AlwaysBuilt API for presigned file uploads
+
 name: Deploy to S3
 
 on:
@@ -5,37 +8,103 @@ on:
   push:
     branches: [main, master]
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4.2.2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4.1.0
-        with:
-          role-to-assume: arn:aws:iam::482464276980:role/github-actions-deploy
-          aws-region: us-east-2
-
-      - name: Sync to S3
+      - name: Deploy via AlwaysBuilt API
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          SERVICE_TOKEN: ${{ secrets.SERVICE_TOKEN }}
         run: |
-          aws s3 sync ./ s3://apex-prod-482464276980-us-east-2-an/josephc/alwaysbuilt-platform-website-11/ \
-            --delete \
-            --exclude ".git/*" \
-            --exclude ".github/*" \
-            --exclude ".DS_Store" \
-            --exclude "README.md" \
-            --exclude "screenshots/*"
+          echo "🚀 Deploying to S3 via API..."
 
-      - name: Invalidate CloudFront cache
-        run: |
-          aws cloudfront create-invalidation \
-            --distribution-id E1VCMZKZC0SI5B \
-            --paths "/josephc/alwaysbuilt-platform-website-11/*" \
-            --region us-east-1 \
-            --no-cli-pager
+          # Auth test
+          AUTH_TEST=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $SERVICE_TOKEN" \
+            -H "Origin: https://app.alwaysbuilt.com" \
+            "$API_URL/v1/orgs")
+          if [ "$AUTH_TEST" = "401" ]; then
+            echo "❌ Authentication failed. Check SERVICE_TOKEN."
+            exit 1
+          fi
+
+          # Determine content type from file extension
+          get_content_type() {
+            local ext="${1##*.}"
+            case "$ext" in
+              html|htm) echo "text/html; charset=utf-8" ;;
+              css)      echo "text/css" ;;
+              js|mjs)   echo "application/javascript" ;;
+              json)     echo "application/json" ;;
+              png)      echo "image/png" ;;
+              jpg|jpeg) echo "image/jpeg" ;;
+              gif)      echo "image/gif" ;;
+              webp)     echo "image/webp" ;;
+              svg)      echo "image/svg+xml" ;;
+              ico)      echo "image/x-icon" ;;
+              woff)     echo "font/woff" ;;
+              woff2)    echo "font/woff2" ;;
+              ttf)      echo "font/ttf" ;;
+              pdf)      echo "application/pdf" ;;
+              map)      echo "application/json" ;;
+              *)        echo "application/octet-stream" ;;
+            esac
+          }
+
+          ERROR_COUNT=0
+          SUCCESS_COUNT=0
+
+          while IFS= read -r -d '' file; do
+            filepath=${file#./}
+            content_type=$(get_content_type "$filepath")
+
+            # Get presigned upload URL from API
+            RESPONSE=$(curl -s -X POST \
+              -H "Authorization: Bearer $SERVICE_TOKEN" \
+              -H "Content-Type: application/json" \
+              "$API_URL/v1/files/$PROJECT_ID/$filepath")
+
+            UPLOAD_URL=$(echo "$RESPONSE" | jq -r '.url')
+
+            if [ "$UPLOAD_URL" != "null" ] && [ -n "$UPLOAD_URL" ]; then
+              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X PUT \
+                -T "$file" \
+                -H "Content-Type: $content_type" \
+                "$UPLOAD_URL")
+
+              if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+                echo "  ✅ $filepath"
+                SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+              else
+                echo "  ❌ $filepath upload failed ($HTTP_CODE)"
+                ERROR_COUNT=$((ERROR_COUNT + 1))
+              fi
+            else
+              echo "  ❌ $filepath: no upload URL — $RESPONSE"
+              ERROR_COUNT=$((ERROR_COUNT + 1))
+            fi
+          done < <(find . -type f \
+            -not -path "./.git/*" \
+            -not -path "./.github/*" \
+            -not -path "./screenshots/*" \
+            -not -name ".gitignore" \
+            -not -name ".project.json" \
+            -not -name "README.md" \
+            -not -name ".DS_Store" \
+            -print0)
+
+          echo ""
+          echo "📊 Deployed $SUCCESS_COUNT files, $ERROR_COUNT errors"
+
+          if [ $ERROR_COUNT -gt 0 ]; then
+            echo "❌ Deployment completed with $ERROR_COUNT errors"
+            exit 1
+          fi
+
+          echo "✅ Successfully deployed $SUCCESS_COUNT files!"
