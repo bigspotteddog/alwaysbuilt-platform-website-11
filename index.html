@@ -905,11 +905,15 @@
 
   var params = new URLSearchParams(window.location.search);
   if (params.get('checkout') === 'success') {
-    var msg = document.createElement('div');
-    msg.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:16px 32px;border-radius:8px;font-size:16px;font-weight:600;z-index:10000;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
-    msg.textContent = 'Welcome aboard! Your subscription is active.';
-    document.body.appendChild(msg);
-    setTimeout(function() { msg.remove(); }, 8000);
+    var overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;';
+    overlay.innerHTML = '<div style="background:#252836;border-radius:16px;padding:48px;max-width:480px;text-align:center;font-family:DM Sans,system-ui,sans-serif;">' +
+      '<div style="width:64px;height:64px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:32px;color:white;">\u2713</div>' +
+      '<h2 style="color:#eee;font-size:24px;margin:0 0 12px;">You\'re in!</h2>' +
+      '<p style="color:#aaa;font-size:16px;margin:0 0 32px;line-height:1.5;">Your subscription is active. Sign in with the same email to start building.</p>' +
+      '<a href="https://app.alwaysbuilt.com/?signup=1" style="display:inline-block;background:#7c6af7;color:white;padding:14px 32px;border-radius:8px;font-size:16px;font-weight:600;text-decoration:none;">Go to AlwaysBuilt &rarr;</a>' +
+      '</div>';
+    document.body.appendChild(overlay);
     params.delete('checkout');
     params.delete('session_id');
     var cleanUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
