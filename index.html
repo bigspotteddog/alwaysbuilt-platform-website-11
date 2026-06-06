@@ -1202,42 +1202,102 @@
 })();
 
 // Smooth Scroll
-// Stripe Checkout
+// Founding Member Signup Flow
 (function() {
   var API_BASE = 'https://api.alwaysbuilt.com';
-  var FOUNDING_MEMBER_PRICE_ID = 'price_1TepNA27hCRUCRVreSYmwND1';
-  var STUDIO_PRICE_ID = 'price_1TepTH27hCRUCRVraWOTyIFq';
-  var PRO_PRICE_ID = 'price_1TepTM27hCRUCRVrmeZhXPES';
-  var AGENCY_PRICE_ID = 'price_1TepT327hCRUCRVrotTWDr9Q';
+  var PLANS = {
+    'price_1TepNA27hCRUCRVreSYmwND1': 'Founding Member',
+    'price_1TepTH27hCRUCRVraWOTyIFq': 'Studio',
+    'price_1TepTM27hCRUCRVrmeZhXPES': 'Pro',
+    'price_1TepT327hCRUCRVrotTWDr9Q': 'Agency'
+  };
 
-  function startCheckout(priceId) {
-    // Public checkout via GET (avoids API Gateway POST auth requirement)
-    var params = new URLSearchParams({
-      priceId: priceId,
-      successUrl: window.location.origin + window.location.pathname + '?checkout=success',
-      cancelUrl: window.location.origin + window.location.pathname + '?checkout=cancelled'
-    });
-    fetch(API_BASE + '/v1/stripe/public-checkout?' + params.toString())
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        alert(data.message || 'Could not start checkout. Please try again.');
+  // Show email capture modal for a given plan
+  function showSignupModal(priceId) {
+    var planName = PLANS[priceId] || 'AlwaysBuilt';
+    var existing = document.getElementById('signup-modal');
+    if (existing) existing.remove();
+
+    var modal = document.createElement('div');
+    modal.id = 'signup-modal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;';
+    modal.innerHTML =
+      '<div style="background:#252836;border-radius:16px;padding:48px;max-width:440px;text-align:center;font-family:DM Sans,system-ui,sans-serif;">' +
+        '<h2 style="color:#eee;font-size:22px;margin:0 0 8px;">Claim Your ' + planName + ' Spot</h2>' +
+        '<p style="color:#999;font-size:14px;margin:0 0 28px;">Enter your email and we\'ll send you a secure login link.</p>' +
+        '<input id="signup-email" type="email" placeholder="you@company.com" style="width:100%;padding:14px 16px;border-radius:8px;border:1px solid #444;background:#1D202B;color:#eee;font-size:16px;box-sizing:border-box;margin-bottom:16px;outline:none;">' +
+        '<button id="signup-submit" style="width:100%;padding:14px;border-radius:8px;background:#7c6af7;color:white;font-size:16px;font-weight:600;border:none;cursor:pointer;">Send My Login Link</button>' +
+        '<p id="signup-status" style="color:#999;font-size:13px;margin:12px 0 0;min-height:20px;"></p>' +
+        '<button id="signup-close" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#666;font-size:24px;cursor:pointer;">\u00d7</button>' +
+      '</div>';
+    document.body.appendChild(modal);
+
+    var emailInput = document.getElementById('signup-email');
+    var submitBtn = document.getElementById('signup-submit');
+    var statusEl = document.getElementById('signup-status');
+    var closeBtn = document.getElementById('signup-close');
+
+    emailInput.focus();
+
+    closeBtn.addEventListener('click', function() { modal.remove(); });
+    modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
+
+    submitBtn.addEventListener('click', function() {
+      var email = emailInput.value.trim();
+      if (!email || !email.includes('@')) {
+        statusEl.style.color = '#ef4444';
+        statusEl.textContent = 'Please enter a valid email.';
+        return;
       }
-    })
-    .catch(function(err) {
-      alert('Checkout error: ' + err.message);
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      statusEl.style.color = '#999';
+      statusEl.textContent = '';
+
+      // Send magic link with checkout redirect
+      var checkoutRedirect = 'https://app.alwaysbuilt.com/?checkout=' + priceId;
+      fetch(API_BASE + '/v1/auth/magic-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Origin': 'https://alwaysbuilt.com' },
+        body: JSON.stringify({
+          email: email,
+          signup: true,
+          redirectUrl: checkoutRedirect
+        })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        submitBtn.style.display = 'none';
+        emailInput.style.display = 'none';
+        statusEl.style.color = '#22c55e';
+        statusEl.style.fontSize = '15px';
+        statusEl.innerHTML = 'Check your email! Click the link to finish signing up and complete your purchase.';
+        var h2 = modal.querySelector('h2');
+        if (h2) h2.textContent = 'Check your email';
+        var p = modal.querySelectorAll('p')[0];
+        if (p) p.textContent = 'We sent a secure login link to ' + email;
+      })
+      .catch(function(err) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send My Login Link';
+        statusEl.style.color = '#ef4444';
+        statusEl.textContent = 'Something went wrong. Please try again.';
+      });
+    });
+
+    emailInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') submitBtn.click();
     });
   }
 
-  window.__startStripeCheckout = startCheckout;
+  window.__startStripeSignup = showSignupModal;
 
+  // Wire up checkout buttons to show signup modal instead of going straight to Stripe
   var checkoutBtn = document.getElementById('checkout-btn');
   if (checkoutBtn) {
     checkoutBtn.addEventListener('click', function(e) {
       e.preventDefault();
-      startCheckout(FOUNDING_MEMBER_PRICE_ID);
+      showSignupModal('price_1TepNA27hCRUCRVreSYmwND1');
     });
   }
 
@@ -1245,8 +1305,8 @@
   checkoutLinks.forEach(function(link) {
     link.addEventListener('click', function(e) {
       e.preventDefault();
-      var priceId = link.getAttribute('data-checkout') || FOUNDING_MEMBER_PRICE_ID;
-      startCheckout(priceId);
+      var priceId = link.getAttribute('data-checkout') || 'price_1TepNA27hCRUCRVreSYmwND1';
+      showSignupModal(priceId);
     });
   });
 
@@ -1257,8 +1317,8 @@
     overlay.innerHTML = '<div style="background:#252836;border-radius:16px;padding:48px;max-width:480px;text-align:center;font-family:DM Sans,system-ui,sans-serif;">' +
       '<div style="width:64px;height:64px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:32px;color:white;">\u2713</div>' +
       '<h2 style="color:#eee;font-size:24px;margin:0 0 12px;">You\'re in!</h2>' +
-      '<p style="color:#aaa;font-size:16px;margin:0 0 32px;line-height:1.5;">Your subscription is active. Sign in with the same email to start building.</p>' +
-      '<a href="https://app.alwaysbuilt.com/?signup=1" style="display:inline-block;background:#7c6af7;color:white;padding:14px 32px;border-radius:8px;font-size:16px;font-weight:600;text-decoration:none;">Go to AlwaysBuilt &rarr;</a>' +
+      '<p style="color:#aaa;font-size:16px;margin:0 0 32px;line-height:1.5;">Your subscription is active. Head to the builder to start creating.</p>' +
+      '<a href="https://app.alwaysbuilt.com" style="display:inline-block;background:#7c6af7;color:white;padding:14px 32px;border-radius:8px;font-size:16px;font-weight:600;text-decoration:none;">Go to AlwaysBuilt &rarr;</a>' +
       '</div>';
     document.body.appendChild(overlay);
     params.delete('checkout');
