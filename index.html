@@ -70,7 +70,16 @@
   #developers div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
 }
 .founding-wrap .tier-grid-label { text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; color: var(--white-50); text-transform: uppercase; margin-bottom: 32px; }
-</style><meta name="simplebiz-project-id" content="0a18dff6-a1fd-4d81-829d-23e3ab50f1ee"></head>
+</style><meta name="simplebiz-project-id" content="0a18dff6-a1fd-4d81-829d-23e3ab50f1ee"><style>
+  @media (max-width: 900px) {
+    #routing-tiers { grid-template-columns: 1fr !important; }
+    #specialty-grid { grid-template-columns: repeat(3, 1fr) !important; }
+    #ai-routing .reveal[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+  }
+  @media (max-width: 560px) {
+    #specialty-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+</style></head>
 
 <body data-debug-result="{&quot;btnExists&quot;:true,&quot;onclick&quot;:null,&quot;toggleExpandFn&quot;:&quot;function&quot;}">
 
@@ -94,7 +103,7 @@
       <div class="nav-menu" style="justify-content: center;">
         <a href="#how-it-works" class="nav-link" style="margin-left: auto;">How It Works</a>
         <a href="#features" class="nav-link">Features</a>
-        <a href="#developers" class="nav-link">Developers</a><a href="#no-lockin" class="nav-link">Ownership</a>
+        <a href="#ai-routing" class="nav-link">AI Engine</a><a href="#developers" class="nav-link">Developers</a><a href="#no-lockin" class="nav-link">Ownership</a>
         <a href="#pricing" class="nav-link">Pricing</a>
         <a href="#faq" class="nav-link">FAQ</a>
         <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" style="margin-left: auto;">
@@ -425,7 +434,131 @@
   </section>
 
   <!-- For Developers -->
-  <section class="section" id="developers">
+  <section class="section" id="ai-routing">
+  <div class="container">
+    <div class="section-header section-center">
+      <span class="section-label reveal visible" style="opacity:1;visibility:visible;transform:none;">AI Engine</span>
+      <h2 class="section-title reveal reveal-delay-1 visible" style="opacity:1;visibility:visible;transform:none;">The right model<br>for every message.</h2>
+      <p class="section-subtitle reveal reveal-delay-2 visible" style="opacity:1;visibility:visible;transform:none;">
+        Every message is classified by skill, complexity, and specialty before a model is selected. You always get the best available model for the job — automatically.
+      </p>
+    </div>
+
+    <!-- Seamless context callout -->
+    <div class="reveal reveal-delay-2 visible" style="opacity:1;visibility:visible;transform:none; max-width:760px; margin: 0 auto 56px; border: 1px solid var(--border-accent); background: var(--accent-soft); padding: 28px 32px; display:flex; gap: 20px; align-items: flex-start;">
+      <div style="flex-shrink:0; width:40px; height:40px; border: 1px solid var(--border-accent); display:flex; align-items:center; justify-content:center; color: var(--accent);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="17 1 21 5 17 9"></polyline>
+          <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+          <polyline points="7 23 3 19 7 15"></polyline>
+          <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+        </svg>
+      </div>
+      <div>
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 8px;">Seamless Context</div>
+        <p style="font-size: 15px; color: var(--white-70); line-height: 1.7; margin: 0;">Your conversation history, file state, and project context transfer automatically across every model in your routing tier. Use Claude Opus for architecture decisions, GLM for execution. <strong style="color: var(--white); font-weight: 500;">One continuous session.</strong></p>
+      </div>
+    </div>
+
+    <!-- Three-column routing explanation -->
+    <p style="font-size: 13px; color: var(--white-50); text-align: center; margin-bottom: 20px; line-height: 1.7;">Default routing uses <strong style="color: var(--white-70); font-weight: 500;">open-weight models</strong> — no API key required to get started. Claude and GPT are available as overrides for any tier or specialty.</p><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 48px;" class="reveal reveal-delay-3 visible" id="routing-tiers">
+
+      <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 28px 24px;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--white-40); text-transform: uppercase; margin-bottom: 6px;">Easy Tier</div>
+        <div style="font-size: 13px; color: var(--white-50); margin-bottom: 16px; line-height: 1.5;">Simple Q&amp;A, summaries, minor tweaks</div>
+        <div style="font-family: var(--font-mono); font-size: 12px; color: var(--accent); padding: 8px 12px; background: var(--white-06); border: 1px solid var(--border);">Qwen3.5-397B</div>
+      </div>
+
+      <div style="border: 1px solid var(--border-accent); background: var(--bg-card); padding: 28px 24px; position: relative;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 6px;">Mid Tier</div>
+        <div style="font-size: 13px; color: var(--white-50); margin-bottom: 16px; line-height: 1.5;">Multi-step reasoning, edits, standard coding</div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--accent); padding: 8px 12px; background: var(--white-06); border: 1px solid var(--border);">DeepSeek-V4-Pro</div>
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--white-40); padding: 8px 12px; background: var(--white-06); border: 1px solid var(--border);">GLM-5.1</div>
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--white-40); padding: 8px 12px; background: var(--white-06); border: 1px solid var(--border);">Kimi-K2.6</div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 28px 24px;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--white-40); text-transform: uppercase; margin-bottom: 6px;">Heavy Tier</div>
+        <div style="font-size: 13px; color: var(--white-50); margin-bottom: 16px; line-height: 1.5;">Full pages from scratch, complex autonomous workflows</div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--accent); padding: 8px 12px; background: var(--white-06); border: 1px solid var(--border);">GLM-5.1</div>
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--white-40); padding: 8px 12px; background: var(--white-06); border: 1px solid var(--border);">Kimi-K2.6</div>
+          <div style="font-family: var(--font-mono); font-size: 12px; color: var(--white-40); padding: 8px 12px; background: var(--white-06); border: 1px solid var(--border);">DeepSeek-V4-Pro</div>
+        </div>
+      </div>
+    </div><div style="margin-top: 12px; display: flex; align-items: center; gap: 10px; justify-content: center; flex-wrap: wrap;">
+    <span style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--white-30); text-transform: uppercase;">Also available as overrides</span>
+    
+      <span style="font-family: var(--font-mono); font-size: 11px; color: var(--white-50); padding: 5px 10px; border: 1px solid var(--border); background: var(--bg-card);">Claude Opus</span>
+    
+      <span style="font-family: var(--font-mono); font-size: 11px; color: var(--white-50); padding: 5px 10px; border: 1px solid var(--border); background: var(--bg-card);">Claude Sonnet</span>
+    
+      <span style="font-family: var(--font-mono); font-size: 11px; color: var(--white-50); padding: 5px 10px; border: 1px solid var(--border); background: var(--bg-card);">GPT-4o</span>
+    
+      <span style="font-family: var(--font-mono); font-size: 11px; color: var(--white-50); padding: 5px 10px; border: 1px solid var(--border); background: var(--bg-card);">GPT-4o mini</span>
+    
+  </div>
+
+    <!-- Specialty overrides row -->
+    <div class="reveal visible" style="opacity:1;visibility:visible;transform:none;">
+      <p style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--white-50); text-transform: uppercase; text-align: center; margin-bottom: 20px;">Specialty Overrides — take priority over tier</p>
+      <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;" id="specialty-grid">
+        
+          <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 16px 14px; text-align: center;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; color: var(--white-50); text-transform: uppercase; margin-bottom: 10px;">Web Design</div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent);">GLM-5.1</div>
+          </div>
+        
+          <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 16px 14px; text-align: center;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; color: var(--white-50); text-transform: uppercase; margin-bottom: 10px;">Coding</div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent);">DeepSeek-V4-Pro</div>
+          </div>
+        
+          <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 16px 14px; text-align: center;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; color: var(--white-50); text-transform: uppercase; margin-bottom: 10px;">Agentic</div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent);">GLM-5.1</div>
+          </div>
+        
+          <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 16px 14px; text-align: center;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; color: var(--white-50); text-transform: uppercase; margin-bottom: 10px;">Long Context</div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent);">Kimi-K2.6</div>
+          </div>
+        
+          <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 16px 14px; text-align: center;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; color: var(--white-50); text-transform: uppercase; margin-bottom: 10px;">Vision</div>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent);">Kimi-K2.6</div>
+          </div>
+        
+      </div>
+    </div>
+
+    <!-- Bottom callout: power user config -->
+    <div class="reveal visible" style="opacity:1;visibility:visible;transform:none; margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 24px 28px; display:flex; gap:16px; align-items:flex-start;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px; color:var(--accent);">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <div>
+          <div style="font-size: 15px; font-weight: 500; color: var(--white); margin-bottom: 6px;">Configurable routing table</div>
+          <p style="font-size: 13px; color: var(--white-50); line-height: 1.6; margin: 0;">Defaults use open-weight models — DeepSeek, GLM, Kimi, Qwen. Claude and GPT models are fully supported as overrides for any tier or specialty. Swap models, reorder fallbacks, and tune every tier for your workflow.</p>
+        </div>
+      </div>
+      <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 24px 28px; display:flex; gap:16px; align-items:flex-start;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px; color:var(--accent);">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+        <div>
+          <div style="font-size: 15px; font-weight: 500; color: var(--white); margin-bottom: 6px;">Classified before every message</div>
+          <p style="font-size: 13px; color: var(--white-50); line-height: 1.6; margin: 0;">The intent router runs on every message — classifying skill, tier, and specialty using a fast Groq model. Falls back to keyword detection if the classification fails. Zero latency added to your workflow.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section><section class="section" id="developers">
     <div class="container">
       <div class="section-header section-center">
         <span class="section-label reveal visible" style="opacity: 1; visibility: visible; transform: none;">For Developers</span>
