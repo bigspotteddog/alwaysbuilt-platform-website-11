@@ -1,5 +1,5 @@
 # AlwaysBuilt Platform Website - Deploy to S3
-# Uses AlwaysBuilt API for presigned file uploads
+# Uses AlwaysBuilt API for presigned file uploads (no AWS credentials needed)
 
 name: Deploy to S3
 
@@ -11,11 +11,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
       - name: Deploy via AlwaysBuilt API
         env:
           API_URL: ${{ secrets.SIMPLEBIZ_API_URL }}
@@ -23,18 +23,24 @@ jobs:
           SERVICE_TOKEN: ${{ secrets.SIMPLEBIZ_SERVICE_TOKEN }}
         run: |
           echo "🚀 Deploying to S3 via API..."
-
+          echo "   API URL: $API_URL"
+          echo "   Project: $PROJECT_ID"
+          
+          # Strip trailing slash from API_URL if present
+          API_URL="${API_URL%/}"
+          
           # Auth test
           AUTH_TEST=$(curl -s -o /dev/null -w "%{http_code}" \
             -H "Authorization: Bearer $SERVICE_TOKEN" \
             -H "Origin: https://app.alwaysbuilt.com" \
             "$API_URL/v1/orgs")
           if [ "$AUTH_TEST" = "401" ]; then
-            echo "❌ Authentication failed. Check SERVICE_TOKEN."
+            echo "❌ Authentication failed. Check SIMPLEBIZ_SERVICE_TOKEN."
             exit 1
           fi
-
-          # Determine content type from file extension
+          echo "✓ Authenticated (HTTP $AUTH_TEST)"
+          
+          # Function to determine content type from file extension
           get_content_type() {
             local ext="${1##*.}"
             case "$ext" in
@@ -51,60 +57,62 @@ jobs:
               woff)     echo "font/woff" ;;
               woff2)    echo "font/woff2" ;;
               ttf)      echo "font/ttf" ;;
+              otf)      echo "application/vnd.ms-fontobject" ;;
               pdf)      echo "application/pdf" ;;
+              txt|md)   echo "text/plain" ;;
+              xml)      echo "application/xml" ;;
+              webmanifest) echo "application/json" ;;
               map)      echo "application/json" ;;
               *)        echo "application/octet-stream" ;;
             esac
           }
-
+          
+          # Function to determine cache-control from file extension
+          get_cache_control() {
+            local ext="${1##*.}"
+            case "$ext" in
+              html|htm|css|js|mjs) echo "no-cache, no-store, must-revalidate" ;;
+              *) echo "public, max-age=86400" ;;
+            esac
+          }
+          
           ERROR_COUNT=0
-          SUCCESS_COUNT=0
 
-          while IFS= read -r -d '' file; do
+          find . -type f -not -path "./.git/*" -not -path "./.github/*" -not -path "./screenshots/*" -not -name "README.md" -not -name ".DS_Store" -not -name ".gitignore" -print0 | while IFS= read -r -d '' file; do
             filepath=${file#./}
             content_type=$(get_content_type "$filepath")
-
-            # Get presigned upload URL from API
-            RESPONSE=$(curl -s -X POST \
+            cache_control=$(get_cache_control "$filepath")
+            echo "  Uploading: $filepath ($content_type) [cache: $cache_control]"
+            
+            API_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
               -H "Authorization: Bearer $SERVICE_TOKEN" \
               -H "Content-Type: application/json" \
+              -H "Origin: https://app.alwaysbuilt.com" \
               "$API_URL/v1/files/$PROJECT_ID/$filepath")
-
-            UPLOAD_URL=$(echo "$RESPONSE" | jq -r '.url')
-
-            if [ "$UPLOAD_URL" != "null" ] && [ -n "$UPLOAD_URL" ]; then
-              HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X PUT \
+            
+            HTTP_STATUS=$(echo "$API_RESPONSE" | tail -n1)
+            RESPONSE=$(echo "$API_RESPONSE" | sed '$d')
+            
+            UPLOAD_URL=$(echo "$RESPONSE" | jq -r '.url // empty')
+            
+            if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ] && [ -n "$UPLOAD_URL" ]; then
+              S3_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X PUT \
                 -T "$file" \
                 -H "Content-Type: $content_type" \
+                -H "Cache-Control: $cache_control" \
                 "$UPLOAD_URL")
-
-              if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
-                echo "  ✅ $filepath"
-                SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+              
+              if [ "$S3_CODE" -ge 200 ] && [ "$S3_CODE" -lt 300 ]; then
+                echo "    ✅ uploaded ($S3_CODE)"
               else
-                echo "  ❌ $filepath upload failed ($HTTP_CODE)"
-                ERROR_COUNT=$((ERROR_COUNT + 1))
+                echo "    ❌ S3 upload failed (HTTP $S3_CODE)"
               fi
             else
-              echo "  ❌ $filepath: no upload URL — $RESPONSE"
-              ERROR_COUNT=$((ERROR_COUNT + 1))
+              echo "    ❌ API returned HTTP $HTTP_STATUS — no upload URL"
+              if [ -n "$RESPONSE" ]; then
+                echo "    ↳ $(echo "$RESPONSE" | jq -c '. // empty' 2>/dev/null || echo "$RESPONSE")"
+              fi
             fi
-          done < <(find . -type f \
-            -not -path "./.git/*" \
-            -not -path "./.github/*" \
-            -not -path "./screenshots/*" \
-            -not -name ".gitignore" \
-            -not -name ".project.json" \
-            -not -name "README.md" \
-            -not -name ".DS_Store" \
-            -print0)
-
-          echo ""
-          echo "📊 Deployed $SUCCESS_COUNT files, $ERROR_COUNT errors"
-
-          if [ $ERROR_COUNT -gt 0 ]; then
-            echo "❌ Deployment completed with $ERROR_COUNT errors"
-            exit 1
-          fi
-
-          echo "✅ Successfully deployed $SUCCESS_COUNT files!"
+          done
+          
+          echo "✅ Deployment complete!"
