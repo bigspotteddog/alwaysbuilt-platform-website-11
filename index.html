@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark"><head>
+<html lang="en" data-theme="light"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AlwaysBuilt</title>
@@ -61,7 +61,16 @@
 </style>
   <style id="custom-css-rules"></style>
   
-<meta name="simplebiz-project-id" content="0a18dff6-a1fd-4d81-829d-23e3ab50f1ee"></head>
+<style id="gap-fixes">@media (max-width: 768px) {
+  #no-lockin .principles-grid { grid-template-columns: 1fr !important; }
+  #primitive .steps-list { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 640px) {
+  .founding-wrap > div > div[style*="grid-template-columns: repeat(3"] { grid-template-columns: 1fr !important; }
+  #developers div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+}
+.founding-wrap .tier-grid-label { text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; color: var(--white-50); text-transform: uppercase; margin-bottom: 32px; }
+</style><meta name="simplebiz-project-id" content="0a18dff6-a1fd-4d81-829d-23e3ab50f1ee"></head>
 
 <body data-debug-result="{&quot;btnExists&quot;:true,&quot;onclick&quot;:null,&quot;toggleExpandFn&quot;:&quot;function&quot;}">
 
@@ -85,7 +94,7 @@
       <div class="nav-menu" style="justify-content: center;">
         <a href="#how-it-works" class="nav-link" style="margin-left: auto;">How It Works</a>
         <a href="#features" class="nav-link">Features</a>
-        <a href="#developers" class="nav-link">Developers</a>
+        <a href="#developers" class="nav-link">Developers</a><a href="#no-lockin" class="nav-link">Ownership</a>
         <a href="#pricing" class="nav-link">Pricing</a>
         <a href="#faq" class="nav-link">FAQ</a>
         <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" style="margin-left: auto;">
@@ -140,9 +149,7 @@
   </svg>
   Watch Demo
 </a>
-    <p class="hero-note" style="outline: none;" contenteditable="false">Limited to 50 spots. White-glove onboarding by the
-  founder. Regular pricing starts at $99/mo.
-</p>
+    <p class="hero-note" style="outline: none;" contenteditable="false">Limited to 50 spots. White-glove onboarding by the founder. Regular pricing: Pro $29 · Developer $99 · Agency $399/mo.</p>
   </div>
 </div>
 
@@ -192,9 +199,7 @@
           You build it.<br>It's already running.
         </h2>
         <p class="section-subtitle reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none; outline: none;" contenteditable="false"></p>
-        <div style="opacity: 1; visibility: visible; transform: none;" class="section-subtitle reveal reveal-delay-2 visible">AlwaysBuilt is a full-stack application platform for
-          building, hosting, and operating web applications. Every project is live from the moment you create it. There
-          is no gap between building and deploying — they are the same thing.</div>
+        <div style="opacity: 1; visibility: visible; transform: none;" class="section-subtitle reveal reveal-delay-2 visible">AlwaysBuilt is a full-stack application platform for building, hosting, and operating web applications. Every project is live from the moment you create it. There is no gap between building and deploying — they are the same thing. The platform is multi-tenant from day one: AlwaysBuilt itself, and every app you build in it.</div>
         <p></p>
       </div>
       <div class="nutshell-stats reveal reveal-delay-3 visible" style="opacity: 1; visibility: visible; transform: none;">
@@ -301,8 +306,7 @@
             </svg>
           </div>
           <h3>Compose, Don't Rebuild</h3>
-          <p>Clone entire projects into subfolders — add a client portal, membership platform, or ecommerce to any site
-            in one click. Copy-paste elements across pages.</p>
+          <p>Every project is a reusable primitive. Build a chart demo, clone it into your host project — it runs on the host's data store. Admin portals can reference client portals across projects. Clone a client portal, membership, or ecommerce module into any site in one click. Components compound over time.</p>
         </div>
         <div class="feature-card reveal reveal-delay-1 visible" style="opacity: 1; visibility: visible; transform: none;">
           <div class="feature-icon">
@@ -313,8 +317,7 @@
             </svg>
           </div>
           <h3>Zero-Config Backend</h3>
-          <p>Forms auto-detect and handle submissions. CRUD works on any data shape without migrations. Email triggers
-            on routes ending in /emails. Stripe sits behind the API.</p>
+          <p>Forms auto-detect and handle submissions. CRUD works on any data shape without migrations. Pre/post webhooks with HMAC validation for custom logic. Email triggers on /emails routes. Stripe and auth are built in.</p>
         </div>
         <div class="feature-card reveal reveal-delay-2 visible" style="opacity: 1; visibility: visible; transform: none;">
           <div class="feature-icon">
@@ -393,7 +396,31 @@
           <p>Clone the client portal module into any project — instant secure client area with magic-link login, private
             document sharing, and scoped data access.</p>
         </div>
-      </div>
+      <div class="feature-card reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+    <div class="feature-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 20V10"></path>
+        <path d="M12 20V4"></path>
+        <path d="M6 20v-6"></path>
+        <path d="M2 20h20"></path>
+      </svg>
+    </div>
+    <h3>Custom Backend Hooks</h3>
+    <p>Pre/post CRUD webhooks with HMAC validation. Call in from your own backend with a project API token. Bring your own agent. Your logic, your infrastructure — AlwaysBuilt handles the rest.</p>
+  </div><div class="feature-card reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+    <div class="feature-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        <line x1="19" y1="8" x2="19" y2="14"></line>
+        <line x1="22" y1="11" x2="16" y2="11"></line>
+      </svg>
+    </div>
+    <h3>Multi-Tenant by Default</h3>
+    <p>AlwaysBuilt is multi-tenant — and so is every app you build in it. The org/project/client structure is built into the data layer. Build a client portal today; it already supports hundreds of clients.</p>
+  </div></div>
     </div>
   </section>
 
@@ -517,11 +544,104 @@
           </div>
         </div>
       </div>
+    <div style="margin-top: 72px;">
+    <div class="section-header section-center" style="margin-bottom: 40px;">
+      <span class="section-label reveal visible" style="opacity:1;visibility:visible;transform:none;">Infrastructure</span>
+      <h3 class="section-title reveal reveal-delay-1 visible" style="opacity:1;visibility:visible;transform:none; font-size: clamp(1.4rem, 3vw, 2rem);">Built on managed AWS.<br>Scales to millions.</h3>
+      <p class="section-subtitle reveal reveal-delay-2 visible" style="opacity:1;visibility:visible;transform:none;">No ops team required. The infrastructure autoscales — from your first user to your millionth.</p>
     </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 900px; margin: 0 auto;">
+      <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 28px;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 16px;">Frontend Stack</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white-70);">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; display: inline-block;"></span>
+              Cloudflare (DDoS + rate limiting)
+            </div>
+          
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white-70);">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; display: inline-block;"></span>
+              CloudFront (global CDN)
+            </div>
+          
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white-70);">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; display: inline-block;"></span>
+              S3 with OAC (origin access control)
+            </div>
+          
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white-70);">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; display: inline-block;"></span>
+              Automatic SSL, custom domains
+            </div>
+          
+        </div>
+      </div>
+      <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 28px;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 16px;">Backend Stack</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white-70);">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; display: inline-block;"></span>
+              Cloudflare (edge protection)
+            </div>
+          
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white-70);">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; display: inline-block;"></span>
+              API Gateway (managed routing)
+            </div>
+          
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white-70);">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; display: inline-block;"></span>
+              Lambda (serverless, autoscaling)
+            </div>
+          
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white-70);">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; display: inline-block;"></span>
+              DynamoDB single-table design (GSI)
+            </div>
+          
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--white-70);">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; display: inline-block;"></span>
+              AI inference via streaming Lambda
+            </div>
+          
+        </div>
+      </div>
+    </div>
+    <p style="text-align: center; font-size: 13px; color: var(--white-50); margin-top: 20px; line-height: 1.7;">Rate limits are managed at the Cloudflare layer. CloudWatch handles logging and observability.</p>
+  </div></div>
   </section>
 
   <!-- For Agencies -->
-  <section class="section" id="agencies">
+  <section class="section" id="primitive">
+    <div class="container">
+      <div class="section-header section-center">
+        <span class="section-label reveal visible" style="opacity:1;visibility:visible;transform:none;">Architecture</span>
+        <h2 class="section-title reveal reveal-delay-1 visible" style="opacity:1;visibility:visible;transform:none;">Every project is<br>a reusable primitive.</h2>
+        <p class="section-subtitle reveal reveal-delay-2 visible" style="opacity:1;visibility:visible;transform:none;">
+          Build once. Compose everywhere. Projects nest, reference each other, and share data stores.
+        </p>
+      </div>
+      <div class="steps-list reveal reveal-delay-3 visible" style="opacity:1;visibility:visible;transform:none;">
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <h3>Build a component project</h3>
+          <p>Create a standalone project that demonstrates one thing — a chart, a calendar, a payment flow. It works on its own, with its own data store.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <h3>Clone it into any host project</h3>
+          <p>Copy the component into a host project's subfolder. The frontend is an S3 copy. The data storage automatically migrates to the host's data store. No migration scripts.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <h3>Cross-project data access</h3>
+          <p>Projects can reference data in other projects. An admin portal can manage a client portal by referencing it directly — just allow access in the client project. Your component library compounds with every build.</p>
+        </div>
+      </div>
+    </div>
+  </section><section class="section" id="agencies">
     <div class="container">
       <div class="section-header section-center">
         <span class="section-label reveal visible" style="opacity: 1; visibility: visible; transform: none;">For Agencies</span>
@@ -548,7 +668,11 @@
             private document sharing, and per-client data isolation. Pair it with the admin module for full client
             management.</p>
         </div>
-      </div>
+      <div class="principle-card reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+    <div class="principle-num">04</div>
+    <h3>Multi-tenant from the start</h3>
+    <p>Every project you build in AlwaysBuilt is multi-tenant by default. The org/project/client structure is baked into the data layer — not bolted on later. Build a client portal once and it already supports unlimited clients, each with fully isolated data.</p>
+  </div></div>
     </div>
   </section>
 
@@ -589,7 +713,38 @@
   </section>
 
   <!-- Pricing -->
-  <section class="section" id="pricing">
+  <section class="section" id="no-lockin">
+    <div class="container">
+      <div class="section-header section-center">
+        <span class="section-label reveal visible" style="opacity:1;visibility:visible;transform:none;">Ownership</span>
+        <h2 class="section-title reveal reveal-delay-1 visible" style="opacity:1;visibility:visible;transform:none;">Your code. Your data.<br>Your stack.</h2>
+        <p class="section-subtitle reveal reveal-delay-2 visible" style="opacity:1;visibility:visible;transform:none;">
+          AlwaysBuilt is a tool, not a cage. Every project is fully portable — front to back.
+        </p>
+      </div>
+      <div class="principles-grid reveal reveal-delay-3 visible" style="opacity:1;visibility:visible;transform:none;">
+        <div class="principle-card">
+          <div class="principle-num">01</div>
+          <h3>Frontend goes anywhere</h3>
+          <p>The host is S3 + CloudFront. The GitHub integration installs a GitHub Action automatically. Push to GitHub and deploy to any host — Vercel, Netlify, your own AWS account — with zero code changes. The backend follows via unique project ID and JWT auth.</p>
+        </div>
+        <div class="principle-card">
+          <div class="principle-num">02</div>
+          <h3>One S3 copy moves everything</h3>
+          <p>A single S3 copy is all it takes to hand off a complete project — files, data, and storage all persist with it. Clone a project into any other project's folder and its data store is automatically available to the host. No migration scripts. No downtime.</p>
+        </div>
+        <div class="principle-card">
+          <div class="principle-num">03</div>
+          <h3>Your backend, your rules</h3>
+          <p>Pre/post CRUD webhooks with HMAC validation let you run custom logic on your own infrastructure. Call back into AlwaysBuilt using a project API token. Bring your own AI agent. Export data any time via DynamoDB export — S3 is just a copy away.</p>
+        </div>
+      <div class="principle-card reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+  <div class="principle-num">04</div>
+  <h3>Deploy elsewhere, build here</h3>
+  <p>Host on your own AWS account, Vercel, or anywhere else — and still use AlwaysBuilt for development. The project ID and JWT auth keep the builder connected to your deployment. Ownership and tooling don't have to be a trade-off.</p>
+</div></div>
+    </div>
+  </section><section class="section" id="pricing">
     <div class="container">
       <div class="section-header section-center">
         <span class="section-label reveal visible" style="opacity: 1; visibility: visible; transform: none;">Pricing</span>
@@ -621,14 +776,33 @@
               <li class="perk-check">Price locked in for life</li>
             </ul>
             <div class="story-divider"></div>
-            <p class="urgency-line" contenteditable="false" style="outline: none;">Only 50 spots available. After the Founding Member tier is full, regular pricing
-              will apply. Regular pricing starts at $99/mo.</p>
+            <p class="urgency-line" contenteditable="false" style="outline: none;">Only 50 spots available. After the Founding Member tier is full, regular pricing applies — Pro $29, Developer $99, Agency $399/mo. Founding Members are locked in at $49 forever at the full Agency tier level.</p>
             <a href="#" class="btn btn-primary btn-full" id="checkout-btn">Claim Your Founding Member Spot — $49/mo
               Forever</a>
           </div>
           <div></div>
         </div>
+      <div style="margin-top: 56px;">
+    <p style="text-align:center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; color: var(--white-50); text-transform: uppercase; margin-bottom: 32px;">Regular Pricing — After Founding Member Tier Closes</p>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+      <div style="border: 1px solid var(--border); padding: 28px 24px; background: var(--bg-card); position: relative;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--white-50); text-transform: uppercase; margin-bottom: 12px;">Pro</div>
+        <div style="font-size: 36px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 4px;">$29<span style="font-size: 14px; font-weight: 400; color: var(--white-50);">/mo</span></div>
+        <p style="font-size: 13px; color: var(--white-50); margin: 16px 0 0; line-height: 1.6;">Personal projects, freelancers, and solo builders getting started.</p>
       </div>
+      <div style="border: 1px solid var(--border-accent); padding: 28px 24px; background: var(--bg-card); position: relative;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 12px;">Developer</div>
+        <div style="font-size: 36px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 4px;">$99<span style="font-size: 14px; font-weight: 400; color: var(--white-50);">/mo</span></div>
+        <p style="font-size: 13px; color: var(--white-50); margin: 16px 0 0; line-height: 1.6;">Full API access, webhooks, custom backend logic, and GitHub integration.</p>
+      </div>
+      <div style="border: 1px solid var(--border); padding: 28px 24px; background: var(--bg-card); position: relative;">
+        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--white-50); text-transform: uppercase; margin-bottom: 12px;">Agency</div>
+        <div style="font-size: 36px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 4px;">$399<span style="font-size: 14px; font-weight: 400; color: var(--white-50);">/mo</span></div>
+        <p style="font-size: 13px; color: var(--white-50); margin: 16px 0 0; line-height: 1.6;">Multi-tenant client portals, white-label handoff, and full org management.</p>
+      </div>
+    </div>
+    <p style="text-align:center; font-size: 13px; color: var(--white-50); margin-top: 20px; line-height: 1.7;">High-volume workloads? <a href="mailto:hello@alwaysbuilt.com" style="color: var(--accent); text-decoration: none;">Talk to us</a> about usage-based pricing.</p>
+  </div></div>
     </div>
   </section>
 
@@ -689,7 +863,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           </span>
         </button>
-          <div class="faq-a">
+          <div class="faq-a" style="">
             <div class="faq-a-inner">
               Yes. Custom domains with automatic SSL via CloudFlare. Vanity subdomains on alwaysbuilt.com are also
               available.
@@ -703,7 +877,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           </span>
         </button>
-          <div class="faq-a">
+          <div class="faq-a" style="">
             <div class="faq-a-inner">
               Publishing is an instant S3 copy from dev to production. Zero data passes through any build pipeline. A
               CloudFront cache invalidation means your changes go live immediately.
@@ -717,7 +891,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           </span>
         </button>
-          <div class="faq-a">
+          <div class="faq-a" style="">
             <div class="faq-a-inner">
               Push to GitHub. Use the included GitHub Actions workflow to deploy anywhere. Or write your own CI/CD. No
               lock-in.
@@ -731,7 +905,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           </span>
         </button>
-          <div class="faq-a">
+          <div class="faq-a" style="">
             <div class="faq-a-inner">
               Founding Members get white-glove onboarding directly with the founder. Join the first 50 to lock in
               $49/month forever.
@@ -745,7 +919,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           </span>
         </button>
-          <div class="faq-a">
+          <div class="faq-a" style="">
             <div class="faq-a-inner">
               Yes. Organization transfers are a pointer change in the database. No data migration. Perfect for agency
               handoffs.
@@ -759,14 +933,54 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           </span>
         </button>
-          <div class="faq-a">
+          <div class="faq-a" style="">
             <div class="faq-a-inner">
               Claude (Anthropic), Llama, Qwen, DeepSeek, Mistral (Together AI), Groq, GLM, Kimi, and Ollama for
               self-hosted models.
             </div>
           </div>
         </div>
+      <div class="faq-item reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+      <button class="faq-q" aria-expanded="false">
+        How do I add custom backend logic?
+        <span class="faq-q-toggle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </span>
+      </button>
+      <div class="faq-a" style="">
+        <div class="faq-a-inner">Use pre/post CRUD webhooks with HMAC validation to trigger your own backend on any data operation. Call back into AlwaysBuilt from your server using a project API token. You can also bring your own AI agent via the API. Sandboxed Lambda functions for inline custom logic are on the roadmap.</div>
       </div>
+    </div><div class="faq-item reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+      <button class="faq-q" aria-expanded="false">
+        Can I export my data?
+        <span class="faq-q-toggle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </span>
+      </button>
+      <div class="faq-a" style="">
+        <div class="faq-a-inner">Yes. DynamoDB export lets you pull all your data any time. File storage is S3 — a copy command is all it takes. There is no proprietary format. Your data is yours.</div>
+      </div>
+    </div><div class="faq-item reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+      <button class="faq-q" aria-expanded="false">
+        Is AlwaysBuilt multi-tenant?
+        <span class="faq-q-toggle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </span>
+      </button>
+      <div class="faq-a" style="">
+        <div class="faq-a-inner">Yes — AlwaysBuilt itself and every app you build in it. The data layer uses an org/project/client structure with DynamoDB single-table design and GSI flattening. You can build a client portal today and it already supports unlimited isolated clients.</div>
+      </div>
+    </div><div class="faq-item reveal visible" style="opacity: 1; visibility: visible; transform: none;">
+    <button class="faq-q" aria-expanded="false">
+      Can I use React, Vue, or a framework that needs a build step?
+      <span class="faq-q-toggle">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      </span>
+    </button>
+    <div class="faq-a" style="">
+      <div class="faq-a-inner">Yes. The GitHub integration installs a GitHub Action automatically — you can modify it to run any build process you want. Build with React, Vue, Svelte, or anything else, then let the action deploy the output to S3. The backend still follows your frontend via the same project ID and JWT auth. You keep all the infrastructure; you just add your own build step.</div>
+    </div>
+  </div></div>
     </div>
   </section>
 
@@ -925,5 +1139,6 @@
   }
 })();
 </script>
-  </body>
-</html>
+  
+
+<iframe class="html2canvas-container" width="990" height="1160" scrolling="no" data-html2canvas-ignore="true" style="visibility: hidden; position: fixed; left: -10000px; top: 0px; border: 0px;"></iframe><iframe class="html2canvas-container" width="1320" height="1547" scrolling="no" data-html2canvas-ignore="true" style="visibility: hidden; position: fixed; left: -10000px; top: 0px; border: 0px;"></iframe><script src="https://alwaysbuilt.com/js/form-handler.js" async=""></script></body></html>
