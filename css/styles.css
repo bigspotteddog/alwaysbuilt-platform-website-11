@@ -2012,3 +2012,91 @@ body::after {
 [data-theme="dark"] .theme-toggle-icon--moon {
   display: block;
 }
+.overage-wrap {
+  background: var(--bg-card, #0d0d0d);
+  border: 1px solid var(--border, rgba(255,255,255,0.08));
+  border-radius: 10px;
+  color: var(--text, #e8e8e8);
+  margin: 40px auto 0;
+  max-width: 900px;
+  padding: 24px 24px 20px;
+}
+.overage-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+
+.overage-grid {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 6px;
+}
+.overage-row-head .overage-cell {
+  background: rgba(212, 175, 106, 0.12);
+  color: var(--gold, #d4af6a);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-right: 1px solid rgba(212, 175, 106, 0.15);
+}
+.overage-cell {
+  border-bottom: 1px solid var(--border, rgba(255,255,255,0.05));
+  border-right: 1px solid rgba(255,255,255,0.04);
+  font-size: 14px;
+  padding: 12px 16px;
+}
+.overage-row-head .overage-cell:last-child { border-right: none; }
+.overage-row .overage-cell:last-child { border-right: none; }
+.overage-row:last-child .overage-cell { border-bottom: none; }
+.overage-eyebrow {
+  color: var(--gold, #d4af6a);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.overage-title {
+  color: var(--text, #fff);
+  font-size: 16px;
+  font-weight: 500;
+}
+/* Overage: rows are 4-col grid, cells inside (not flat flex children) */
+.overage-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+}
+.overage-cell-feat {
+  color: var(--text-dim, rgba(255,255,255,0.7));
+}
+.overage-foot {
+  color: rgba(255,255,255,0.5);
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 14px;
+}
+@media (max-width: 700px) {
+  .overage-row { grid-template-columns: 1fr; }
+  .overage-cell {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    justify-content: space-between;
+  }
+}
+.overage-wrap .overage-row {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+}
+div.overage-wrap {
+  display:block !important; grid-template-columns:none !important; max-width:900px; margin:40px auto 0; padding:24px 24px 20px; background:var(--bg-card, #0d0d0d); border:1px solid var(--border, rgba(255,255,255,0.08)); border-radius:10px; color:var(--text, #e8e8e8);: ;
+}
+div.overage-wrap .overage-row {
+  display:grid !important; grid-template-columns:2fr 1fr 1fr 1fr !important; grid-column:1 / -1;: ;
+}

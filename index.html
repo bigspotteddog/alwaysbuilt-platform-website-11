@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light"><head>
+<html lang="en" data-theme="dark"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AlwaysBuilt</title>
@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=1779523555904">
+  <link rel="stylesheet" href="css/styles.css?v=1780978642495">
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <style id="depth-ladder-styles">.depth-ladder { max-width: var(--max-width); margin: 48px auto 0px; display: flex; flex-direction: column; gap: 0px; }
 .depth-rung { display: grid; grid-template-columns: 160px 1fr; gap: 40px; padding: 36px 0px; border-bottom: 1px solid var(--border); position: relative; transition: background 0.3s; }
@@ -59,7 +59,12 @@
 #builderPeek.expanded #builderIframe { zoom: 1 !important; }
 #expandIcon.expanded { transform: rotate(180deg); transition: transform 0.3s; }
 </style>
-  <style id="custom-css-rules"></style>
+  <style id="custom-css-rules">.footer-inner { flex-direction: column; align-items: stretch; gap: 0px; }
+.footer-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 28px; }
+.footer-bottom { text-align: left; }
+.hero-panel { overflow: hidden; padding: 0px !important; }
+.builder-chrome #iframeWrap { flex: 1 1 auto !important; min-height: 420px !important; background: linear-gradient(rgb(26, 22, 17) 0%, rgb(15, 12, 8) 100%) !important; box-shadow: rgba(0, 0, 0, 0.7) 0px 30px 60px -20px, rgba(212, 175, 55, 0.18) 0px 0px 0px 1px !important; overflow: hidden !important; position: relative !important; }
+</style>
   
 <style id="gap-fixes">@media (max-width: 768px) {
   #no-lockin .principles-grid { grid-template-columns: 1fr !important; }
@@ -70,7 +75,7 @@
   #developers div[style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
 }
 .founding-wrap .tier-grid-label { text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; color: var(--white-50); text-transform: uppercase; margin-bottom: 32px; }
-</style><meta name="simplebiz-project-id" content="0a18dff6-a1fd-4d81-829d-23e3ab50f1ee"><style>
+</style><style>
   @media (max-width: 900px) {
     #routing-tiers { grid-template-columns: 1fr !important; }
     #specialty-grid { grid-template-columns: repeat(3, 1fr) !important; }
@@ -79,7 +84,52 @@
   @media (max-width: 560px) {
     #specialty-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
-</style></head>
+</style><meta name="simplebiz-project-id" content="0a18dff6-a1fd-4d81-829d-23e3ab50f1ee"><style id="pricing-table-styles">.pricing-table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--border); background: var(--bg-card); position: relative; }
+.pricing-table { width: 100%; min-width: 880px; border-collapse: collapse; font-family: var(--font-body); font-size: 14px; color: var(--white-50) !important; }
+.pricing-table thead th { font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--white-50); font-weight: 500; text-align: center; padding: 18px 14px 8px; border-bottom: 1px solid var(--border); background: var(--bg-card); position: sticky; top: 0px; z-index: 2; }
+.pricing-table thead th.pt-feature { text-align: left; padding-left: 24px; width: 220px; }
+.pricing-table thead th.pt-tier { min-width: 130px; }
+.pricing-table thead th.pt-tier-featured { color: var(--accent); background: linear-gradient(rgba(200, 178, 115, 0.08), transparent); position: relative; }
+.pricing-table thead th.pt-tier-featured::after { content: "RECOMMENDED"; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 8px; letter-spacing: 1.5px; color: var(--accent); background: rgba(200, 178, 115, 0.1); border: 1px solid rgba(200, 178, 115, 0.3); padding: 2px 8px; }
+.pricing-table .pt-price-row td { padding-top: 8px; padding-bottom: 24px; border-bottom: 1px solid var(--border); vertical-align: bottom; }
+.pricing-table .pt-price-row .pt-price { font-family: var(--font-display); font-size: 32px; font-weight: 600; font-style: italic; color: var(--accent); line-height: 1; letter-spacing: -0.02em; }
+.pricing-table .pt-price-row .pt-period { font-family: var(--font-body); font-size: 11px; font-weight: 400; font-style: normal; color: var(--white-50); margin-left: 2px; }
+.pricing-table tbody td { padding: 12px 14px; border-bottom: 1px solid rgba(232, 228, 221, 0.04); text-align: center; font-size: 14px !important; color: --var(white-50) !important; }
+.pricing-table tbody td.pt-feature { text-align: left; padding-left: 24px; font-weight: 400; color: var(--white-50) !important; }
+.pricing-table tbody td.pt-tier-featured { background: rgba(200, 178, 115, 0.04); color: var(--white); }
+.pricing-table tbody tr:hover td:not(.pt-feature) { background: rgba(232, 228, 221, 0.02); }
+.pricing-table tbody tr:hover td.pt-tier-featured { background: rgba(200, 178, 115, 0.08); }
+.pricing-table .pt-check { color: var(--accent); font-weight: 600; font-size: 16px; }
+.pricing-table .pt-dash { color: rgba(232, 228, 221, 0.25); font-size: 18px; line-height: 1; }
+.pricing-table .pt-section-row td { padding: 22px 14px 8px; border-bottom: 1px solid var(--border); }
+.pricing-table .pt-section-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); text-align: left; font-weight: 500; padding-left: 24px !important; }
+.pricing-table .pt-label-strong { letter-spacing: 2px; text-transform: uppercase; font-family: var(--font-mono) !important; font-size: 10px !important; color: var(--white-50) !important; font-weight: 500 !important; }
+.pricing-table tbody tr:last-child td { border-bottom-width: medium; border-bottom-style: none; border-bottom-color: currentcolor; }
+@media (max-width: 900px) {
+  .pricing-table { min-width: 760px; }
+  .pricing-table thead th.pt-feature { width: 180px; }
+}
+@media (max-width: 768px) {
+  .pricing-table thead th.pt-tier-featured::after { font-size: 7px; letter-spacing: 1px; }
+  .pricing-table .pt-price-row .pt-price { font-size: 26px; }
+}
+.overage-wrap { grid-template-columns: 1fr 1fr; display: grid !important; }
+.overage-wrap .overage-row { grid-template-columns: 1fr 1fr; grid-column: 1 / -1; display: grid !important; }
+.overage-cell { padding: 16px 24px; border-bottom: 1px solid rgba(232, 228, 221, 0.06); border-right: 1px solid rgba(232, 228, 221, 0.06); font-size: 14px; }
+.overage-cell:nth-child(2n) { border-right-width: medium; border-right-style: none; border-right-color: currentcolor; }
+.overage-label { color: rgba(232, 228, 221, 0.7); font-weight: 400; }
+.overage-value { color: var(--accent); font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.5px; text-align: right; }
+@media (max-width: 600px) {
+  .overage-wrap { grid-template-columns: 1fr !important; }
+  .overage-wrap .overage-row { grid-template-columns: 1fr 1fr !important; }
+  .overage-cell { padding: 12px 16px; font-size: 13px; }
+}
+.pt-tier-badge { display: inline-block; background: var(--accent); color: var(--bg); font-family: var(--font-mono); font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 10px; border-radius: 2px; margin-bottom: 12px; }
+.pt-tier-price { font-family: var(--font-display); font-size: 32px; font-weight: 600; color: var(--accent); letter-spacing: -0.5px; line-height: 1; }
+.pt-tier-price span { font-size: 13px; font-weight: 400; color: var(--white-50); margin-left: 2px; letter-spacing: 0px; }
+.pt-tier-sub { font-family: var(--font-mono); font-size: 10px; color: var(--white-50); letter-spacing: 1px; text-transform: uppercase; margin-top: 6px; }
+.pricing-table thead th.pt-tier-featured { padding: 24px 16px 20px; border-top: 2px solid var(--accent); border-bottom: 1px solid var(--accent); vertical-align: top; }
+</style><script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><style>@keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.3 } }</style></head>
 
 <body data-debug-result="{&quot;btnExists&quot;:true,&quot;onclick&quot;:null,&quot;toggleExpandFn&quot;:&quot;function&quot;}">
 
@@ -165,28 +215,28 @@
       <div class="hero-right" style="display: flex; align-items: center; justify-content: center; overflow: visible; width: 100%; height: 100%;">
 
         <div id="builderPeek" class="d-flex" style="display: flex; flex: 1 1 auto; width: 100%; height: 100%; zoom: 1; flex-direction: column !important;">
-          <div class="builder-chrome d-flex flex-column" style="flex: 1 1 auto; box-shadow: rgba(0, 0, 0, 0.26) 4px 4px 12px 2px; border-radius: 8px; overflow: hidden; position: relative;">
-            <!-- Chrome Bar -->
-            <div class="chrome-bar" style="display: flex; align-items: center; justify-content: space-between; padding-right: 1rem; padding-left: 1rem; flex: 0 0 auto; height: 48px; outline: none;" contenteditable="false">
-              <div class="d-flex align-items-center gap-2">
-                <span class="cd-r" style="box-sizing: border-box; width: 10px; height: 10px; border-radius: 50%; background: rgb(255, 95, 87); padding: 0px;"></span><span class="cd-y"></span><span class="cd-g"></span>
-              </div>
-              <div class="mono small" contenteditable="false" style="outline: none;">app.alwaysbuilt.com</div>
-              <div class="d-flex align-items-center gap-2" style="
+  <div class="builder-chrome d-flex flex-column" style="flex: 1 1 auto; box-shadow: rgba(0, 0, 0, 0.26) 4px 4px 12px 2px; border-radius: 8px; overflow: hidden; position: relative;">
+    <!-- Chrome Bar -->
+    <div class="chrome-bar" style="display: flex; align-items: center; justify-content: space-between; padding-right: 1rem; padding-left: 1rem; flex: 0 0 auto; height: 48px; outline: none;" contenteditable="false">
+      <div class="d-flex align-items-center gap-2">
+        <span class="cd-r" style="box-sizing: border-box; width: 10px; height: 10px; border-radius: 50%; background: rgb(255, 95, 87); padding: 0px;"></span><span class="cd-y"></span><span class="cd-g"></span>
+      </div>
+      <div class="mono small" contenteditable="false" style="outline: none;">app.alwaysbuilt.com</div>
+      <div class="d-flex align-items-center gap-2" style="
     display: flex;
     align-items: center;
 ">
-                <div class="live-dot"></div>
-                <span id="chrome-lbl" class="small">Live demo</span><button id="chromeExpand" class="btn btn-sm p-1" style="border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; background: none; padding: 15px;" title="View full demo" onclick="toggleExpand()"><svg id="expandIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class=""><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></button>
-              </div>
-            </div><!-- Iframe Fill Area -->
-            <div id="iframeWrap" class="position-relative" style="flex: 1 1 auto; overflow: hidden; background: rgb(240, 240, 240); height: calc(100% - 48px);">
-              <iframe id="builderIframe" src="https://app.alwaysbuilt.com/?demo=1" frameborder="0" style="top: 0px; left: 0px; width: 100%; height: 100%; border: 0px; background: rgb(255, 255, 255); zoom: 0.6;"></iframe>
-            </div>
+        <div class="live-dot"></div>
+        <span id="chrome-lbl" class="small" onclick="window.open('https://app.alwaysbuilt.com/','_blank')" title="Open live demo" style="cursor: pointer;">Live demo</span><button id="chromeExpand" class="btn btn-sm p-1" style="border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; background: none; padding: 15px;" title="View full demo" onclick="toggleExpand()"><svg id="expandIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class=""><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></button>
+      </div>
+    </div><!-- Iframe Fill Area -->
+    <div id="iframeWrap" class="position-relative" style="flex: 1 1 auto; overflow: hidden; background: rgb(240, 240, 240); height: calc(100% - 48px);">
+  <iframe id="builderIframe" src="https://app.alwaysbuilt.com/?demo=1" frameborder="0" style="top: 0px; left: 0px; width: 100%; height: 100%; border: 0px; background: rgb(255, 255, 255); zoom: 0.6;"></iframe>
+</div>
 
 
-          </div>
-        </div>
+  </div>
+</div>
 
 
 
@@ -461,7 +511,7 @@
     </div>
 
     <!-- Three-column routing explanation -->
-    <p style="font-size: 13px; color: var(--white-50); text-align: center; margin-bottom: 20px; line-height: 1.7;">Default routing uses <strong style="color: var(--white-70); font-weight: 500;">open-weight models</strong> — no API key required to get started. Claude and GPT are available as overrides for any tier or specialty.</p><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 48px;" class="reveal reveal-delay-3 visible" id="routing-tiers">
+    <p style="font-size: 13px; color: var(--white-50); text-align: center; margin-bottom: 20px; line-height: 1.7;">Default routing uses <strong style="color: var(--white-70); font-weight: 500;">open-weight models</strong> — no API key required to get started. Claude and GPT are available as overrides for any tier or specialty.</p><div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 48px; opacity: 1; visibility: visible; transform: none;" class="reveal reveal-delay-3 visible" id="routing-tiers">
 
       <div style="border: 1px solid var(--border); background: var(--bg-card); padding: 28px 24px;">
         <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--white-40); text-transform: uppercase; margin-bottom: 6px;">Easy Tier</div>
@@ -877,7 +927,8 @@
   <p>Host on your own AWS account, Vercel, or anywhere else — and still use AlwaysBuilt for development. The project ID and JWT auth keep the builder connected to your deployment. Ownership and tooling don't have to be a trade-off.</p>
 </div></div>
     </div>
-  </section><section class="section" id="pricing">
+  </section>
+<section class="section" id="pricing">
     <div class="container">
       <div class="section-header section-center">
         <span class="section-label reveal visible" style="opacity: 1; visibility: visible; transform: none;">Pricing</span>
@@ -886,58 +937,301 @@
           Limited to the first 50 members. Price locked in for life. All top-level features included.
         </p>
       </div>
+
+      <!-- FOUNDING MEMBER CALLOUT -->
       <div class="founding-wrap reveal reveal-delay-3 visible" style="opacity: 1; visibility: visible; transform: none; max-width: 1100px;">
-        <div class="founding-card">
-          <div style="max-width: 500px; margin: auto; padding: 1rem;">
-            <div class="price-badge">Founding Member</div>
-            <div class="pricing-amount" style="margin: 2rem;">
-              <span class="pricing-dollar">$</span>
-              <span class="price-amount">49</span>
-              <span class="pricing-period">/month</span>
-            </div>
-            <p class="pricing-sub">Forever. Never increases.</p>
-            <div class="story-divider"></div>
-            <ul class="perks-list">
-              <li class="perk-check">Unlimited projects</li>
-              <li class="perk-check">Unlimited pages per project</li>
-              <li class="perk-check">Custom domains with auto-SSL</li>
-              <li class="perk-check">Full AI agent access (all models)</li>
-              <li class="perk-check">Stripe payments integration</li>
-              <li class="perk-check">GitHub publishing</li>
-              <li class="perk-check">White-glove onboarding by the founder</li>
-              <li class="perk-check">All top-level subscription features</li>
-              <li class="perk-check">Price locked in for life</li>
-            </ul>
-            <div class="story-divider"></div>
-            <p class="urgency-line" contenteditable="false" style="outline: none;">Only 50 spots available. After the Founding Member tier is full, regular pricing applies — Pro $29, Developer $99, Agency $399/mo. Founding Members are locked in at $49 forever at the full Agency tier level.</p>
-            <a href="#" class="btn btn-primary btn-full" id="checkout-btn">Claim Your Founding Member Spot — $49/mo
-              Forever</a>
+        <div class="founding-card" style="padding: 56px; text-align: center;">
+          <div class="price-badge" style="margin-bottom: 18px;">Founding Member</div>
+          <div class="pricing-amount" style="align-items: baseline; gap: 6px;">
+            <span class="pricing-dollar">$</span>
+            <span class="price-amount">49</span>
+            <span class="pricing-period">/month forever</span>
           </div>
-          <div></div>
+          <p class="pricing-sub" style="color: var(--white-50); margin: 4rem auto; font-size: 15px; line-height: 1.7; max-width: 640px;">
+            <strong style="color: var(--white); font-weight: 500;">Limited to 50 spots.</strong>
+            Agency-grade platform locked at $49 forever. 15 projects, 750K API calls, 25GB storage, Medium-High AI credits, white-glove onboarding by the founder.
+            Regular Agency pricing is $399/mo. <em>Cancel anytime.</em>
+          </p>
+          <div>
+  <div>
+    <a href="#" class="btn btn-primary" id="checkout-btn">Claim Your Founding Member Spot — $49/mo Forever</a>
+  </div>
+
+  <div style="outline: none; margin: 1rem; font-size: 14px; color: var(--white-50);">Limited to 50 spots</div>
+</div>
         </div>
-      <div style="margin-top: 56px;">
-    <p style="text-align:center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; color: var(--white-50); text-transform: uppercase; margin-bottom: 32px;">Regular Pricing — After Founding Member Tier Closes</p>
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
-      <div style="border: 1px solid var(--border); padding: 28px 24px; background: var(--bg-card); position: relative;">
-        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--white-50); text-transform: uppercase; margin-bottom: 12px;">Pro</div>
-        <div style="font-size: 36px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 4px;">$29<span style="font-size: 14px; font-weight: 400; color: var(--white-50);">/mo</span></div>
-        <p style="font-size: 13px; color: var(--white-50); margin: 16px 0 0; line-height: 1.6;">Personal projects, freelancers, and solo builders getting started.</p>
       </div>
-      <div style="border: 1px solid var(--border-accent); padding: 28px 24px; background: var(--bg-card); position: relative;">
-        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 12px;">Developer</div>
-        <div style="font-size: 36px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 4px;">$99<span style="font-size: 14px; font-weight: 400; color: var(--white-50);">/mo</span></div>
-        <p style="font-size: 13px; color: var(--white-50); margin: 16px 0 0; line-height: 1.6;">Full API access, webhooks, custom backend logic, and GitHub integration.</p>
-      </div>
-      <div style="border: 1px solid var(--border); padding: 28px 24px; background: var(--bg-card); position: relative;">
-        <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; color: var(--white-50); text-transform: uppercase; margin-bottom: 12px;">Agency</div>
-        <div style="font-size: 36px; font-weight: 700; color: var(--white); line-height: 1; margin-bottom: 4px;">$399<span style="font-size: 14px; font-weight: 400; color: var(--white-50);">/mo</span></div>
-        <p style="font-size: 13px; color: var(--white-50); margin: 16px 0 0; line-height: 1.6;">Multi-tenant client portals, white-label handoff, and full org management.</p>
-      </div>
+
+      <!-- PRICING COMPARISON TABLE -->
+      <div style="margin-top: 80px;">
+        <p style="text-align:center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; color: var(--white-50); text-transform: uppercase; margin-bottom: 24px;">Compare All Tiers</p>
+        <div class="pricing-table-wrap">
+          <table class="pricing-table">
+            <thead>
+              <tr>
+                <th class="pt-feature">Feature</th>
+                <th class="pt-tier">
+      <div class="pt-tier-name">Free</div>
+      <div class="pt-tier-price">$0</div>
+      <div class="pt-tier-sub">forever</div>
+    </th>
+                <th class="pt-tier">
+      <div class="pt-tier-name">Pro</div>
+      <div class="pt-tier-price">$27<span>/mo</span></div>
+      <div class="pt-tier-sub">per month</div>
+    </th>
+                <th class="pt-tier">
+      <div class="pt-tier-name">Developer</div>
+      <div class="pt-tier-price">$99<span>/mo</span></div>
+      <div class="pt-tier-sub">per month</div>
+    </th>
+                <th class="pt-tier">
+      <div class="pt-tier-name">Agency</div>
+      <div class="pt-tier-price">$399<span>/mo</span></div>
+      <div class="pt-tier-sub">per month</div>
+    </th>
+                <th class="pt-tier pt-tier-featured">
+    <div class="pt-tier-badge">Founding Member</div>
+    <div class="pt-tier-price">$49<span>/mo</span></div>
+    <div class="pt-tier-sub">Forever · 50 spots</div>
+  </th>
+              <th class="pt-tier">
+      <div class="pt-tier-name">Enterprise</div>
+      <div class="pt-tier-price">Custom</div>
+      <div class="pt-tier-sub">contact us</div>
+    </th></tr>
+              
+            </thead>
+            <tbody>
+              <tr>
+                <td class="pt-feature">Projects</td>
+                <td class="pt-tier">0 live</td>
+                <td class="pt-tier">1</td>
+                <td class="pt-tier">5</td>
+                <td class="pt-tier">25</td>
+                <td class="pt-tier pt-tier-featured">15</td>
+              <td class="pt-tier">Unlimited</td></tr>
+              <tr>
+                <td class="pt-feature">API calls / mo</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier">100K</td>
+                <td class="pt-tier">500K</td>
+                <td class="pt-tier">2M</td>
+                <td class="pt-tier pt-tier-featured">750K</td>
+              <td class="pt-tier">Unlimited</td></tr>
+              <tr>
+                <td class="pt-feature">Storage</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier">5GB</td>
+                <td class="pt-tier">20GB</td>
+                <td class="pt-tier">100GB</td>
+                <td class="pt-tier pt-tier-featured">25GB</td>
+              <td class="pt-tier">Unlimited</td></tr>
+              <tr>
+                <td class="pt-feature">Bandwidth / mo</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier">10GB</td>
+                <td class="pt-tier">50GB</td>
+                <td class="pt-tier">200GB</td>
+                <td class="pt-tier pt-tier-featured">50GB</td>
+              <td class="pt-tier">Unlimited</td></tr>
+              <tr>
+                <td class="pt-feature">AI credits</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier">Low</td>
+                <td class="pt-tier">Medium</td>
+                <td class="pt-tier">High</td>
+                <td class="pt-tier pt-tier-featured">Medium-High</td>
+              <td class="pt-tier">Custom</td></tr>
+              
+              <tr>
+                <td class="pt-feature">Custom domains</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier">1</td>
+                <td class="pt-tier">5</td>
+                <td class="pt-tier">Unlimited</td>
+                <td class="pt-tier pt-tier-featured">15</td>
+              <td class="pt-tier">Unlimited</td></tr>
+              <tr class="pt-section-row">
+                <td colspan="7" class="pt-section-label">Platform features</td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">GitHub integration</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier pt-tier-featured"><span class="pt-check">✓</span></td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">Magic link auth</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier pt-tier-featured"><span class="pt-check">✓</span></td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">Stripe Connect</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier pt-tier-featured"><span class="pt-check">✓</span></td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">Client portal</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier pt-tier-featured"><span class="pt-check">✓</span></td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">Pre/post webhooks</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier pt-tier-featured"><span class="pt-check">✓</span></td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">Version history</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier pt-tier-featured"><span class="pt-check">✓</span></td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">Point-and-click editor</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier pt-tier-featured"><span class="pt-check">✓</span></td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">Monaco code editor</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier pt-tier-featured"><span class="pt-check">✓</span></td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">AI agent</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier pt-tier-featured"><span class="pt-check">✓</span></td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">Overage available</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier pt-tier-featured"><span class="pt-check">✓</span></td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">Support</td>
+                <td class="pt-tier"><span class="pt-dash">—</span></td>
+                <td class="pt-tier">Community</td>
+                <td class="pt-tier">Email</td>
+                <td class="pt-tier">Priority</td>
+                <td class="pt-tier pt-tier-featured">White-glove</td>
+              <td class="pt-tier">Dedicated + SLA</td></tr>
+              <tr class="pt-section-row">
+                <td colspan="7" class="pt-section-label">Identity</td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">Identity / collaborator</td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier pt-tier-featured"><span class="pt-check">✓</span></td>
+              <td class="pt-tier">✓</td></tr>
+              <tr>
+                <td class="pt-feature">Can be invited to orgs</td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier"><span class="pt-check">✓</span></td>
+                <td class="pt-tier pt-tier-featured"><span class="pt-check">✓</span></td>
+              <td class="pt-tier">✓</td></tr>
+            </tbody>
+          </table>
+        </div><div class="overage-wrap">
+  <div class="overage-head">
+    <span class="overage-eyebrow">Overage rates</span>
+    <span class="overage-title">What it costs when you exceed a metered limit</span>
+  </div>
+  <div class="overage-grid">
+    <div class="overage-row overage-row-head">
+      <div class="overage-cell overage-cell-feat">Metered feature</div>
+      <div class="overage-cell">Pro</div>
+      <div class="overage-cell">Developer</div>
+      <div class="overage-cell">Agency</div>
     </div>
-    <p style="text-align:center; font-size: 13px; color: var(--white-50); margin-top: 20px; line-height: 1.7;">High-volume workloads? <a href="mailto:hello@alwaysbuilt.com" style="color: var(--accent); text-decoration: none;">Talk to us</a> about usage-based pricing.</p>
-  </div></div>
+    <div class="overage-row">
+      <div class="overage-cell overage-cell-feat">API calls (per 100K)</div>
+      <div class="overage-cell">$1.00</div>
+      <div class="overage-cell">$0.75</div>
+      <div class="overage-cell">$0.50</div>
+    </div>
+    <div class="overage-row">
+      <div class="overage-cell overage-cell-feat">Storage (per GB)</div>
+      <div class="overage-cell">$0.20</div>
+      <div class="overage-cell">$0.15</div>
+      <div class="overage-cell">$0.10</div>
+    </div>
+    <div class="overage-row">
+      <div class="overage-cell overage-cell-feat">Bandwidth (per GB)</div>
+      <div class="overage-cell">$0.15</div>
+      <div class="overage-cell">$0.10</div>
+      <div class="overage-cell">$0.07</div>
+    </div>
+    <div class="overage-row">
+      <div class="overage-cell overage-cell-feat">AI credits (per 1K)</div>
+      <div class="overage-cell">$1.00</div>
+      <div class="overage-cell">$0.75</div>
+      <div class="overage-cell">$0.50</div>
+    </div>
+    <div class="overage-row">
+      <div class="overage-cell overage-cell-feat">Extra project</div>
+      <div class="overage-cell">$4 / mo</div>
+      <div class="overage-cell">$3 / mo</div>
+      <div class="overage-cell">$2 / mo</div>
+    </div>
+    <div class="overage-row">
+      <div class="overage-cell overage-cell-feat">Extra sub-account</div>
+      <div class="overage-cell">$5 / mo</div>
+      <div class="overage-cell">$4 / mo</div>
+      <div class="overage-cell">$3 / mo</div>
+    </div>
+    <div class="overage-row">
+      <div class="overage-cell overage-cell-feat">Custom domain</div>
+      <div class="overage-cell">$2 / mo</div>
+      <div class="overage-cell">$1.50 / mo</div>
+      <div class="overage-cell">$1 / mo</div>
+    </div>
+  </div>
+  <div class="overage-foot">Free, Founding Member and Enterprise are not metered — overage does not apply.</div>
+</div>
+      </div>
+
+      <!-- OVERAGE RATES -->
+      <div style="margin-top: 80px;">
+        <p style="text-align:center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; color: var(--white-50); text-transform: uppercase; margin-bottom: 24px;">Overage Rates — All Paid Tiers</p>
+        
+        <p style="text-align:center; font-size: 13px; color: var(--white-50); margin-top: 20px; line-height: 1.7;">High-volume workloads? <a href="mailto:hello@alwaysbuilt.com" style="color: var(--accent); text-decoration: none;">Talk to us</a> about usage-based pricing.</p>
+      </div>
     </div>
   </section>
+
 
   <!-- CTA Strip -->
   <section class="cta-strip">
@@ -1119,28 +1413,32 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="footer-inner container">
+    
+  <div class="footer-inner container">
+    <div class="footer-top">
       <div class="footer-brand">
-  <a class="footer-logo" href="#">
-    <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
-      <rect x="2" y="2" width="24" height="24" stroke="currentColor" stroke-width="1.5"></rect>
-      <rect x="6" y="6" width="16" height="16" stroke="currentColor" stroke-width="1.5"></rect>
-      <rect x="10" y="10" width="8" height="8" fill="currentColor"></rect>
-    </svg>
-  </a>
-  <p class="footer-tagline"><span style="color: var(--white); outline: none;" contenteditable="false" class="">AlwaysBuilt</span> Design IS the Running Application</p>
-</div>
-      <div class="footer-links">
+        <a class="footer-logo" href="#">
+          <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
+            <rect x="2" y="2" width="24" height="24" stroke="currentColor" stroke-width="1.5"></rect>
+            <rect x="6" y="6" width="16" height="16" stroke="currentColor" stroke-width="1.5"></rect>
+            <rect x="10" y="10" width="8" height="8" fill="currentColor"></rect>
+          </svg>
+        </a>
+        <p class="footer-tagline">AlwaysBuilt Design IS the Running Application</p>
+      </div>
+      <nav class="footer-links">
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
         <a href="#faq">FAQ</a>
         <a href="https://app.alwaysbuilt.com" target="_blank" rel="noopener">Builder</a>
-      </div>
-      <div class="footer-bottom">
-        <span contenteditable="false" class="" style="outline: none;">© 2026 AlwaysBuilt. All rights reserved.</span>
-        <span class="footer-built">Built on AlwaysBuilt</span>
-      </div>
+      </nav>
     </div>
+    <div class="footer-bottom">
+      <span>© 2026 AlwaysBuilt. All rights reserved.</span>
+      <span class="footer-built">Built on AlwaysBuilt</span>
+    </div>
+  </div>
+
   </footer>
 
   <!-- Scripts -->
@@ -1334,4 +1632,4 @@
 </script>
   
 
-<iframe class="html2canvas-container" width="990" height="1160" scrolling="no" data-html2canvas-ignore="true" style="visibility: hidden; position: fixed; left: -10000px; top: 0px; border: 0px;"></iframe><iframe class="html2canvas-container" width="1320" height="1547" scrolling="no" data-html2canvas-ignore="true" style="visibility: hidden; position: fixed; left: -10000px; top: 0px; border: 0px;"></iframe><script src="https://alwaysbuilt.com/js/form-handler.js" async=""></script></body></html>
+<iframe class="html2canvas-container" width="990" height="1160" scrolling="no" data-html2canvas-ignore="true" style="visibility: hidden; position: fixed; left: -10000px; top: 0px; border: 0px;"></iframe><iframe class="html2canvas-container" width="1320" height="1547" scrolling="no" data-html2canvas-ignore="true" style="visibility: hidden; position: fixed; left: -10000px; top: 0px; border: 0px;"></iframe><script src="https://alwaysbuilt.com/js/form-handler.js" async=""></script><iframe class="html2canvas-container" width="1106" height="947" scrolling="no" data-html2canvas-ignore="true" style="visibility: hidden; position: fixed; left: -10000px; top: 0px; border: 0px;"></iframe><iframe class="html2canvas-container" width="1106" height="947" scrolling="no" data-html2canvas-ignore="true" style="visibility: hidden; position: fixed; left: -10000px; top: 0px; border: 0px;"></iframe><iframe class="html2canvas-container" width="1106" height="947" scrolling="no" data-html2canvas-ignore="true" style="visibility: hidden; position: fixed; left: -10000px; top: 0px; border: 0px;"></iframe><iframe class="html2canvas-container" width="1106" height="947" scrolling="no" data-html2canvas-ignore="true" style="visibility: hidden; position: fixed; left: -10000px; top: 0px; border: 0px;"></iframe></body></html>
