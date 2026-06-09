@@ -1520,11 +1520,11 @@
     modal.id = 'signup-modal';
     modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;';
     modal.innerHTML =
-      '<div style="background:#252836;border-radius:16px;padding:48px;max-width:440px;text-align:center;font-family:DM Sans,system-ui,sans-serif;">' +
-        '<h2 style="color:#eee;font-size:22px;margin:0 0 8px;">Claim Your ' + planName + ' Spot</h2>' +
+      '<div style="background:#252836;border-radius:16px;padding:48px;max-width:440px;text-align:center;font-family:DM Sans,system-ui,sans-serif;border:1px solid rgba(200,178,115,0.2);">' +
+        '<h2 style="color:#eee;font-size:22px;margin:0 0 8px;font-weight:500;">Claim Your ' + planName + ' Spot</h2>' +
         '<p style="color:#999;font-size:14px;margin:0 0 28px;">Enter your email and we\'ll send you a secure login link.</p>' +
-        '<input id="signup-email" type="email" placeholder="you@company.com" style="width:100%;padding:14px 16px;border-radius:8px;border:1px solid #444;background:#1D202B;color:#eee;font-size:16px;box-sizing:border-box;margin-bottom:16px;outline:none;">' +
-        '<button id="signup-submit" style="width:100%;padding:14px;border-radius:8px;background:#7c6af7;color:white;font-size:16px;font-weight:600;border:none;cursor:pointer;">Send My Login Link</button>' +
+        '<input id="signup-email" type="email" placeholder="you@company.com" style="width:100%;padding:14px 16px;border-radius:8px;border:1px solid rgba(200,178,115,0.3);background:#1D202B;color:#eee;font-size:16px;box-sizing:border-box;margin-bottom:16px;outline:none;font-family:inherit;">' +
+        '<button id="signup-submit" style="width:100%;padding:14px;border-radius:8px;background:#c8b273;color:#080808;font-size:14px;font-weight:600;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:0.06em;font-family:inherit;transition:background 0.2s;">Send My Login Link</button>' +
         '<p id="signup-status" style="color:#999;font-size:13px;margin:12px 0 0;min-height:20px;"></p>' +
         '<button id="signup-close" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#666;font-size:24px;cursor:pointer;">\u00d7</button>' +
       '</div>';
@@ -1612,11 +1612,11 @@
   if (params.get('checkout') === 'success') {
     var overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;';
-    overlay.innerHTML = '<div style="background:#252836;border-radius:16px;padding:48px;max-width:480px;text-align:center;font-family:DM Sans,system-ui,sans-serif;">' +
-      '<div style="width:64px;height:64px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:32px;color:white;">\u2713</div>' +
-      '<h2 style="color:#eee;font-size:24px;margin:0 0 12px;">You\'re in!</h2>' +
+    overlay.innerHTML = '<div style="background:#252836;border-radius:16px;padding:48px;max-width:480px;text-align:center;font-family:DM Sans,system-ui,sans-serif;border:1px solid rgba(200,178,115,0.2);">' +
+      '<div style="width:64px;height:64px;background:#c8b273;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:32px;color:#080808;">\u2713</div>' +
+      '<h2 style="color:#eee;font-size:24px;margin:0 0 12px;font-weight:500;">You\'re in!</h2>' +
       '<p style="color:#aaa;font-size:16px;margin:0 0 32px;line-height:1.5;">Your subscription is active. Head to the builder to start creating.</p>' +
-      '<a href="https://app.alwaysbuilt.com" style="display:inline-block;background:#7c6af7;color:white;padding:14px 32px;border-radius:8px;font-size:16px;font-weight:600;text-decoration:none;">Go to AlwaysBuilt &rarr;</a>' +
+      '<a href="https://app.alwaysbuilt.com" style="display:inline-block;background:#c8b273;color:#080808;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;text-transform:uppercase;letter-spacing:0.06em;transition:background 0.2s;">Go to AlwaysBuilt &rarr;</a>' +
       '</div>';
     document.body.appendChild(overlay);
     params.delete('checkout');
